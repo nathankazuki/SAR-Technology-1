@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:title="Home"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/gallery"
+        android:icon="@drawable/ic_image_library"
+        android:title="Gallery"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/interval"
+        android:title="Interval"
+        android:icon="@drawable/ic_action_interval"
+        app:showAsAction="always"/>
+</menu>

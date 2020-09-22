@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.clarifai.clarity.AutoFitTextureView
+            android:id="@+id/texture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.983" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/concepts_list_rv"
+            android:layout_width="189dp"
+            android:layout_height="256dp"
+            android:layout_marginBottom="364dp"
+            android:alpha="0.5"
+            android:padding="10dp"
+            android:rotation="0"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            app:layout_constraintBottom_toBottomOf="@+id/texture"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <include
+            layout="@layout/toolbar"
+            android:id="@+id/my_toolbar">
+        </include>
+
+        <TextView
+            android:id="@+id/LocationView"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:background="@color/cardview_light_background"
+            android:alpha="0.5"
+            android:textColor="#000000"
+            android:text="Acquiring Location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>
