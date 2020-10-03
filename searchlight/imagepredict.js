@@ -405,8 +405,8 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
                     dataTags = response.rawData.outputs[i].data.concepts;
                     dateObj = new Date(fileData[i].lastModified);
                     // utcString = dateObj.toUTCString()
-                    
-                    //hides timezone 
+
+                    //hides timezone
                     dateString = dateObj.toString().slice(0, 24)
                     if (fileData[i].webkitRelativePath !== "") {
                         fullFilePath = fileData[i].webkitRelativePath
@@ -562,7 +562,7 @@ function getSelectedVal() {
 
 // Datatables setup
 $(document).ready(function() {
-    
+
     $('#results').DataTable( {
         "search": {"regex": true, "smart": false},
         "autoWidth": false,
@@ -629,7 +629,7 @@ function getPhotodata(file) {
                 exifLat = exifAllTags.GPSLatitude
                 if (exifLat) {
                     if (exifLatRef == "S") {
-                        var latitude = (exifLat[0]*-1) + (( (exifLat[1]*-60) + (exifLat[2]*-1) ) / 3600);						
+                        var latitude = (exifLat[0]*-1) + (( (exifLat[1]*-60) + (exifLat[2]*-1) ) / 3600);
                     } else {
                         var latitude = exifLat[0] + (( (exifLat[1]*60) + exifLat[2] ) / 3600);
                     }
@@ -642,7 +642,7 @@ function getPhotodata(file) {
                     if (exifLongRef == "E") {
                         var longitude = exifLong[0] + (( (exifLong[1]*60) + exifLong[2] ) / 3600);
                     } else {
-                        var longitude = (exifLong[0]*-1) + (( (exifLong[1]*-60) + (exifLong[2]*-1) ) / 3600);						
+                        var longitude = (exifLong[0]*-1) + (( (exifLong[1]*-60) + (exifLong[2]*-1) ) / 3600);
                     }
                 } else {
                     var longitude = 0
@@ -661,7 +661,7 @@ function getPhotodata(file) {
             } else {
                 var dateTaken = ''
             }
-            
+
             var make = exifAllTags.Make ? exifAllTags.Make : ''
             var model = exifAllTags.Model ? exifAllTags.Model : ''
             var device = exifAllTags.Model ? make + ' ' + model : 'Not Available'
@@ -672,7 +672,7 @@ function getPhotodata(file) {
             var bearingRef = exifAllTags.GPSDestBearingRef ? exifAllTags.GPSDestBearingRef : ''
             var speed = exifAllTags.GPSSpeed ? exifAllTags.GPSSpeed : 'Not Available'
             var speedRef = exifAllTags.GPSSpeedRef ? exifAllTags.GPSSpeedRef + "PH" : ''
-            var mapsLink = latitude && longitude ? "<a href='http://maps.google.com/maps?q=" + latitude + ',' + longitude + "'>" + latStr + ', ' + lonStr + "<img src='./images/marker.png' height='16' width='92' style='margin-left: 8px'></a>" : 'Not Available' 
+            var mapsLink = latitude && longitude ? "<a href='http://maps.google.com/maps?q=" + latitude + ',' + longitude + "'  target='_blank'>" + latStr + ', ' + lonStr + "<img src='./images/marker.png' height='16' width='92' style='margin-left: 8px'></a>" : 'Not Available'
             resolve([latitude, longitude, dateTaken, device, latStr, lonStr, altitude, bearing, bearingRef, speed, speedRef, mapsLink])
 
     })
@@ -753,6 +753,18 @@ function segmentation(file, type){
     })
 }
 
+function imgSelect(cell){
+    console.log("Called select");
+    if (cell.checked == "checked"){
+        cell.style.opacity = 0.5;
+        cell.checked = "unchecked";
+    }
+    else{
+        cell.style.opacity = 1;
+        cell.checked = "checked";
+    }
+}
+
 function createTable(result) {
     var k = 0;
     var image_list = result;
@@ -764,13 +776,15 @@ function createTable(result) {
         for(var c=0;c<parseInt(cn,10);c++)
         {
             var y = x.insertCell(c);
-            var chkbox = document.createElement('input');
-            chkbox.type = "checkbox";
-            chkbox.checked = "checked";
-
-            y.appendChild(chkbox);
-            img = new Image();
+            // var chkbox = document.createElement('input');
+            // chkbox.type = "checkbox";
+            // chkbox.checked = "checked";
+            // y.appendChild(chkbox);
+            
+            var img = new Image();
             img.src = image_list[k];
+            y.setAttribute('checked', "checked");
+            y.setAttribute('onclick', 'imgSelect(this)');
             table_width = 600;
             cell_width = Math.ceil(table_width/cn);
             cell_height = Math.ceil(temp_height*table_width/(temp_width*rn));
@@ -919,7 +933,7 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
     if (modelID == Clarifai.COLOR_MODEL) {
         //Clarifai API call
         app.models.predict(modelID, val, threshold).then( function (response) {
-                console.log(response);
+                console.log("API Call: " + response);
                 successfulPredict = true;
                 processedImageCount += val.length;
                 // Update this thing too, the number does not update, make a new var and have it count(? maybe)
@@ -1149,6 +1163,3 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
         )
     }
 }
-
-
-
