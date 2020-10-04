@@ -754,14 +754,13 @@ function segmentation(file, type){
 }
 
 function imgSelect(cell){
-    console.log("Called select");
-    if (cell.checked == "checked"){
+    if (cell.style.opacity == 1){
+        //Set to inactive
         cell.style.opacity = 0.5;
-        cell.checked = "unchecked";
     }
     else{
+        //Set active
         cell.style.opacity = 1;
-        cell.checked = "checked";
     }
 }
 
@@ -783,7 +782,7 @@ function createTable(result) {
             
             var img = new Image();
             img.src = image_list[k];
-            y.setAttribute('checked', "checked");
+            y.style.opacity = 1;
             y.setAttribute('onclick', 'imgSelect(this)');
             table_width = 600;
             cell_width = Math.ceil(table_width/cn);
@@ -804,13 +803,18 @@ var segment_selection = [];
 function get_checkbox_list(){
     segment_selection = [];
     var table = document.getElementById("test_table");
-    for (var row_num = 0, row; row = table.rows[row_num]; row_num++) {
-        for (var col_num = 0, col; col = row.cells[col_num]; col_num++) {
-            var child = row.cells[col_num].childNodes;
-            segment_selection.push(child[0].checked)
+    for (let i = 0; i < table.rows.length; i++){
+        for (let j = 0; j < table.rows[i].cells.length; j++){
+            if (table.rows[i].cells[j].style.opacity == 1){
+                segment_selection.push(true);
+            }
+            else{
+                segment_selection.push(false);
+            }
+            console.log(table.rows[i].cells[j]);
         }
     }
-    console.log(segment_selection)
+    console.log(segment_selection);
 }
 
 function on_load_segment(file, num_seg){
@@ -933,7 +937,7 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
     if (modelID == Clarifai.COLOR_MODEL) {
         //Clarifai API call
         app.models.predict(modelID, val, threshold).then( function (response) {
-                console.log("API Call: " + response);
+                console.log(response);
                 successfulPredict = true;
                 processedImageCount += val.length;
                 // Update this thing too, the number does not update, make a new var and have it count(? maybe)
