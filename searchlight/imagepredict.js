@@ -753,14 +753,22 @@ function segmentation(file, type){
     })
 }
 
+/**
+ * 
+ * @param {Image segment} cell 
+ * Sets cell image opacity
+ * Opacity of 1 is selected
+ * Opactiy of 0.1 is deselected
+ */
 function imgSelect(cell){
-    if (cell.style.opacity == 1){
-        //Set to inactive
+    let seg = cell.classList.contains("segSelected");
+    if (seg){
         cell.style.opacity = 0.5;
+        cell.classList.remove("segSelected");
     }
     else{
-        //Set active
         cell.style.opacity = 1;
+        cell.classList.add("segSelected");
     }
 }
 
@@ -774,15 +782,16 @@ function createTable(result) {
 
         for(var c=0;c<parseInt(cn,10);c++)
         {
+            //Create cell and insert image with function
             var y = x.insertCell(c);
-            // var chkbox = document.createElement('input');
-            // chkbox.type = "checkbox";
-            // chkbox.checked = "checked";
-            // y.appendChild(chkbox);
-            
             var img = new Image();
             img.src = image_list[k];
+
+            
             y.style.opacity = 1;
+            //Adds segSelected class by default selecting all segments
+            y.classList.add("segSelected");
+
             y.setAttribute('onclick', 'imgSelect(this)');
             table_width = 600;
             cell_width = Math.ceil(table_width/cn);
@@ -805,7 +814,8 @@ function get_checkbox_list(){
     var table = document.getElementById("test_table");
     for (let i = 0; i < table.rows.length; i++){
         for (let j = 0; j < table.rows[i].cells.length; j++){
-            if (table.rows[i].cells[j].style.opacity == 1){
+            //Adds true or false to segment_selection based on if 'segSelected' class is found for cell
+            if (table.rows[i].cells[j].classList.contains("segSelected")){
                 segment_selection.push(true);
             }
             else{
