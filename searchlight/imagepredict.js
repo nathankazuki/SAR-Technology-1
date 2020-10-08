@@ -50,16 +50,19 @@ function showFileName(value) {
     var total_segment_num = input.files.length * segment_selection.filter(Boolean).length;
 
     var totalHTML = document.getElementById('totalProcessed');
-    totalImageCount += input.files.length;
+
 
     if (segment_option){
         if (segment_selection.length < 1){
             window.alert("Segmentation is enabled. Please select the segments with the selection box in the upper right.");
             return
         }
-        totalHTML.innerHTML = (totalImageCount * segment_selection.filter(Boolean).length).toString();
+
+        totalHTML.innerHTML = (totalImageCount + total_segment_num).toString() ;
+        totalImageCount += total_segment_num;
     }else{
         totalHTML.innerHTML = totalImageCount;
+        totalImageCount += input.files.length;
     }
 
     //update user-defined segmentation selection
@@ -672,7 +675,7 @@ function getPhotodata(file) {
             var bearingRef = exifAllTags.GPSDestBearingRef ? exifAllTags.GPSDestBearingRef : ''
             var speed = exifAllTags.GPSSpeed ? exifAllTags.GPSSpeed : 'Not Available'
             var speedRef = exifAllTags.GPSSpeedRef ? exifAllTags.GPSSpeedRef + "PH" : ''
-            var mapsLink = latitude && longitude ? "<a href='http://maps.google.com/maps?q=" + latitude + ',' + longitude + "'  target='_blank'>" + latStr + ', ' + lonStr + "<img src='./images/marker.png' height='16' width='92' style='margin-left: 8px'></a>" : 'Not Available'
+            var mapsLink = latitude && longitude ? "<a href='http://maps.google.com/maps?q=" + latitude + ',' + longitude + "'  target='_blank'>" + latStr + ', ' + lonStr + "<img src='./images/MagnifyingGlassBlue.png' height='16' width='16' style='margin-left: 8px'></a>" : 'Not Available'
             resolve([latitude, longitude, dateTaken, device, latStr, lonStr, altitude, bearing, bearingRef, speed, speedRef, mapsLink])
 
     })
