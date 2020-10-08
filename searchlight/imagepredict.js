@@ -318,12 +318,12 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
                                                 var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + ' ' + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Size: " + rows_detail[4][4] /1000 + " KB" + "<br>Device: " + values[i][3]
                                                     + "<br>Date Taken: " + values[i][2] + "<br>Date Modified: " + rows_detail[4][5] + "<br>Coords: " + values[i][11] + "<br>Altitude: " + values[i][6] + "<br>Direction: " + values[i][7] + " " + values[i][8]
                                                     + "<br>Speed: " + values[i][9] + " " + values[i][10]
-                                                    + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] + "' name='note' placeholder='Enter notes here'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                                    + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] + "' name='note' placeholder='Enter notes here'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                             } else {
                                                 var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Size: " + rows_detail[4][4] /1000 + " KB" + "<br>Device: Not Available"
                                                     + "<br>Date Taken: Not Available<br>Date Modified: " + rows_detail[4][5]
                                                     + "<br>Coords: Not Available<br>Altitude: Not Available<br>Direction: Not Available<br>Speed: Not Available<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] +
-                                                    "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                                    "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                             }
                                             t.row.add( [
                                                 rows_detail[0],
@@ -344,7 +344,7 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
 
                                         var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Size: " + rows_detail[4][4] /1000 + " KB"
                                             + "<br>Date Modified: " + rows_detail[4][5] + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0]
-                                            + "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                            + "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                         t.row.add( [
                                             rows_detail[0],
                                             rows_detail[1],
@@ -449,12 +449,12 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
                                             var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + ' ' + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Size: " + rows_detail[4][4] /1000 + " KB" + "<br>Device: " + values[i][3]
                                                 + "<br>Date Taken: " + values[i][2] + "<br>Date Modified: " + rows_detail[4][5] + "<br>Coords: " + values[i][11] + "<br>Altitude: " + values[i][6] + "<br>Direction: " + values[i][7] + " " + values[i][8]
                                                 + "<br>Speed: " + values[i][9] + " " + values[i][10]
-                                                + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] + "' name='note' placeholder='Enter notes here'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                                + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] + "' name='note' placeholder='Enter notes here'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                         } else {
                                             var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Size: " + rows_detail[4][4] /1000 + " KB" + "<br>Device: Not Available"
                                                 + "<br>Date Taken: Not Available<br>Date Modified: " + rows_detail[4][5]
                                                 + "<br>Coords: Not Available<br>Altitude: Not Available<br>Direction: Not Available<br>Speed: Not Available<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] +
-                                                "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                                "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                         }
                                         t.row.add( [
                                             rows_detail[0],
@@ -476,7 +476,7 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
 
                                     var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Size: " + rows_detail[4][4] /1000 + " KB"
                                         + "<br>Date Modified: " + rows_detail[4][5] + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0]
-                                        + "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                        + "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                     t.row.add( [
                                         rows_detail[0],
                                         rows_detail[1],
@@ -610,7 +610,7 @@ $(document).ready(function() {
 
 function addNote(i) {
     note = "note" + i;
-    document.getElementById("notes").value += "\r\nImage " + i + ": " + document.getElementById(note).value;
+    document.getElementById("notes").value += "Image " + i + ": " + document.getElementById(note).value + "\r\n";
 }
 
 function getPhotodata(file) {
@@ -995,12 +995,12 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                                             var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + ' ' + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Original Image Size: " + rows_detail[4][4] /1000 + " KB" + "<br>Device: " + values[i][3]
                                                 + "<br>Date Taken: " + values[i][2] + "<br>Date Modified: " + rows_detail[4][5] + "<br>Coords: " + values[i][11] + "<br>Altitude: " + values[i][6] + "<br>Direction: " + values[i][7] + " " + values[i][8]
                                                 + "<br>Speed: " + values[i][9] + " " + values[i][10]
-                                                + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] + "' name='note' placeholder='Enter notes here'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                                + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] + "' name='note' placeholder='Enter notes here'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                         } else {
                                             var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Original Image Size: " + rows_detail[4][4] /1000 + " KB" + "<br>Device: Not Available"
                                                 + "<br>Date Taken: Not Available<br>Date Modified: " + rows_detail[4][5]
                                                 + "<br>Coords: Not Available<br>Altitude: Not Available<br>Direction: Not Available<br>Speed: Not Available<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] +
-                                                "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                                "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                         }
                                         t.row.add( [
                                             rows_detail[0],
@@ -1022,7 +1022,7 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                                     for (var m = 0; m < values.length; ++m) {
                                         var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Original Image Size: " + rows_detail[4][4] /1000 + " KB"
                                             + "<br>Date Modified: " + rows_detail[4][5] + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0]
-                                            + "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                            + "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                         t.row.add( [
                                             rows_detail[0],
                                             rows_detail[1],
@@ -1118,12 +1118,12 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                                         var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + ' ' + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Original Image Size: " + rows_detail[4][4] /1000 + " KB" + "<br>Device: " + values[i][3]
                                             + "<br>Date Taken: " + values[i][2] + "<br>Date Modified: " + rows_detail[4][5] + "<br>Coords: " + values[i][11] + "<br>Altitude: " + values[i][6] + "<br>Direction: " + values[i][7] + " " + values[i][8]
                                             + "<br>Speed: " + values[i][9] + " " + values[i][10]
-                                            + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] + "' name='note' placeholder='Enter notes here'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                            + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] + "' name='note' placeholder='Enter notes here'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                     } else {
                                         var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Original Image Size: " + rows_detail[4][4] /1000 + " KB" + "<br>Device: Not Available"
                                             + "<br>Date Taken: Not Available<br>Date Modified: " + rows_detail[4][5]
                                             + "<br>Coords: Not Available<br>Altitude: Not Available<br>Direction: Not Available<br>Speed: Not Available<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0] +
-                                            "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                            "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                     }
                                     t.row.add( [
                                         rows_detail[0],
@@ -1145,7 +1145,7 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                                 for (var m = 0; m < values.length; ++m) {
                                     var imgDetail = "<br>Image #" + rows_detail[4][0] + ": " + rows_detail[4][1] + rows_detail[4][2] + "<br>" + rows_detail[4][3] + "<br>Original Image Size: " + rows_detail[4][4] /1000 + " KB"
                                         + "<br>Date Modified: " + rows_detail[4][5] + "<br><input type='text' style='width: 600px' id='note" + rows_detail[4][0]
-                                        + "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(" + rows_detail[4][0] + ")'>"
+                                        + "' name='note' placeholder='Enter notes here' style='width: 200'><input type='button' value='Add' onclick='addNote(\"" + rows_detail[4][0] + "\")'>"
                                     t.row.add( [
                                         rows_detail[0],
                                         rows_detail[1],
