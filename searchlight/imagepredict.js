@@ -61,8 +61,8 @@ function showFileName(value) {
         totalHTML.innerHTML = (totalImageCount + total_segment_num).toString() ;
         totalImageCount += total_segment_num;
     }else{
-        totalHTML.innerHTML = totalImageCount;
         totalImageCount += input.files.length;
+        totalHTML.innerHTML = totalImageCount;
     }
 
     //update user-defined segmentation selection
