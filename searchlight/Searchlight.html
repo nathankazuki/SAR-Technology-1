@@ -1,259 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Searchlight Image Locator</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/hgWqKCT.png">
-    <!-- Importing jquery, clarafai sdk, keys.js -->
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="https://sdk.clarifai.com/js/clarifai-latest.js"></script>
-    <script type="text/javascript" src="keys.js"></script>
-    <script type="text/javascript" src="imagepredict.js"></script>
-    <script type="text/javascript" src="exif.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles/style.css">
-    <link rel="stylesheet" href="jquery.dataTables.min.css">
-    <script src="./jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="buttons.html5.min.js"></script>
-    <script type="text/javascript" src="jszip.min.js"></script>
-    <script type="text/javascript" src="natural.js"></script>
-    <!-- Copied from original because it seemed important -->
-    <script>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Searchlight Image Locator</title>
+  <link rel="icon" type="image/png" href="https://i.imgur.com/hgWqKCT.png">
+  <!-- Importing jquery, clarafai sdk, keys.js -->
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="https://sdk.clarifai.com/js/clarifai-latest.js"></script>
+  <script type="text/javascript" src="keys.js"></script>
+  <script type="text/javascript" src="imagepredict.js"></script>
+  <script type="text/javascript" src="exif.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles/style.css">
+  <link rel="stylesheet" href="jquery.dataTables.min.css">
+  <script src="./jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="dataTables.buttons.min.js"></script>
+  <script type="text/javascript" src="buttons.html5.min.js"></script>
+  <script type="text/javascript" src="jszip.min.js"></script>
+  <script type="text/javascript" src="natural.js"></script>
+  <!-- Copied from original because it seemed important -->
+  <script>
 
 
-        // Checks for valid image type
-        function validFile(imageName) {
-            var lowerImageName = imageName.toLowerCase();
-            return lowerImageName.search(/jpg|png|bmp|tiff|jpeg/gi) != -1;
-        }
+    // Checks for valid image type
+    function validFile(imageName) {
+      var lowerImageName = imageName.toLowerCase();
+      return lowerImageName.search(/jpg|png|bmp|tiff|jpeg/gi) != -1;
+    }
 
-    </script>
-    <meta name="author" content="SAR Technology Inc.">
-  </head>
-  <body>
-    <div id="backgroundimage">
-      <div id="MainDiv">
-        <!-- Navbar -->
-        <ul id="navbar">
-          <li class="navbarItem" style="float: left;"><a href="#home">
-              <div id="navImage"><img src="./images/logo_transparent.png"></div>
-            </a></li>
-          <div class="navbarItem" style="position: absolute; right: 0px; top: 80px"><a
-              href="#" onclick="window.open('tips.htm','tips','resizable,height=520,width=650'); return false;">
-              <div><img src="./images/tooltip.png" style="margin: 20px 20px 0 0"
-                  height="32" width="32"></div>
-            </a></div>
-        </ul>
-        <!-- Start of Main Div -->
-        <div id="titleImage" style="text-align: center"><img src="./images/searchlight-logo.png"></div>
-      </div>
-      <div id="boxContainer">
-        <div id="imageSelectSection" class="notDraggedOver" style="float: left; margin-right: 1%; width: 440px;">
-          <div class="flexwrap">
-            <!-- This is just to make position: relative work -->
-            <!-- <div class="fileUpload">
+  </script>
+  <meta name="author" content="SAR Technology Inc.">
+</head>
+
+<body>
+  <div id="backgroundimage">
+    <div id="MainDiv">
+      <!-- Navbar -->
+      <ul id="navbar">
+        <li class="navbarItem" style="float: left;"><a href="#home">
+            <div id="navImage"><img src="./images/logo_transparent.png"></div>
+          </a></li>
+        <div class="navbarItem" style="position: absolute; right: 0px; top: 80px"><a href="#"
+            onclick="window.open('tips.htm','tips','resizable,height=520,width=650'); return false;">
+            <div><img src="./images/tooltip.png" style="margin: 20px 20px 0 0" height="32" width="32"></div>
+          </a></div>
+      </ul>
+      <!-- Start of Main Div -->
+      <div id="titleImage" style="text-align: center"><img src="./images/searchlight-logo.png"></div>
+    </div>
+    <div id="boxContainer">
+      <div id="imageSelectSection" class="notDraggedOver" style="float: left; margin-right: 1%; width: 440px;">
+        <div class="flexwrap">
+          <!-- This is just to make position: relative work -->
+          <!-- <div class="fileUpload">
           <img id="arrow" src="./images/UploadArrowBlue.png" style="width: 25px; height: 25px;">          <img id="imageUp" src="./images/ImageCommanderIconBlue.png" style="width: 25px; height: 25px;">          Upload Image Files        </div> -->
-            <!-- <div id="tooltip3"> 
+          <!-- <div id="tooltip3"> 
           <img id="tooltipimg3" src="./images/tooltip.png">           <span id="tooltiptext3" class="tooltipStyle">            Tips: Max-Upload 200 images (jpg or png). Max-FileSize 400KB per image.          </span>         </div> -->
-            <!-- End Tooltip3 --> </div>
-          <!-- End flexwrap -->
-          <!-- File UploadSection div -->
-          <div id="fileUploadSection" style="display: flex"> <label for="imageFolderSelectButton"
-              id="folderUpload" style="float: left; margin-right: auto;"> Upload
-              Image Folder<br>
-              <img id="folderUp" src="./images/UploadFolder.png" style="width: 75px; height: 75px;"><br>
-              <input name="imageFolderSelectButton" id="imageFolderSelectButton"
-                size="10" multiple="" webkitdirectory="" directory="" type="file">
-            </label> <label for="imageFileSelectButton" id="fileUpload"> Upload
-              Image Files <img id="fileUp" src="./images/UploadFile.png" style="width: 100px; height: 75px;"><br>
-              <input name="imageFileSelectButton" id="imageFileSelectButton" size="10"
-                multiple="multiple" type="file"></label></div>
-          <div style="display: flex"><label for="imageFileSelectButton"><br>
-            </label></div>
-          <div style="display: flex"><label for="imageFileSelectButton"><br>
-            </label></div>
-          <label for="imageFileSelectButton"><span style="color: #999999; font-family: Times New Roman,Times,serif;"><span
-                style="color: #999999; font-family: Times New Roman,Times,serif;">Tip:
-                Refresh Browser before Uploads&nbsp; &nbsp; <a href="./Guidelines.htm"
-                  title="Image Resizer for Windows" target="_blank"><img src="images/ImageResizerForWindows_47x31.png"
-                    alt="" title="Image Resizer for Windows" style="width: 41px; height: 28px;"></a>
-                <a href="./Guidelines.htm" title="Image Resizer for Windows" target="_blank">Upload
-                  Guidelines</a> &nbsp;&nbsp;&nbsp;&nbsp; <br>
-              </span></span></label> </div>
-        <!-- Target image div ; Select segmentation WAS here--> &nbsp;
-        &nbsp;&nbsp; <br>
-        <div id="targetImage">
-          <div id="buttons"><input id="minimize" src="./images/minimize.png" onclick="document.getElementById('targetImage').style.height = '40px'"
-              type="image"> <input id="restore" src="./images/zoom.png" onclick="document.getElementById('targetImage').style.height = 'auto'"
-              type="image"> </div>
-          <div class="hint"> Upload Segment-Selection Image (optional) : .... </div>
-          <table style="padding-top: 2%;">
+          <!-- End Tooltip3 -->
+        </div>
+        <!-- End flexwrap -->
+        <!-- File UploadSection div -->
+        <div id="fileUploadSection" style="display: flex"> <label for="imageFolderSelectButton" id="folderUpload"
+            style="float: left; margin-right: auto;"> Upload
+            Image Folder<br>
+            <img id="folderUp" src="./images/UploadFolder.png" style="width: 75px; height: 75px;"><br>
+            <input name="imageFolderSelectButton" id="imageFolderSelectButton" size="10" multiple="" webkitdirectory=""
+              directory="" type="file">
+          </label> <label for="imageFileSelectButton" id="fileUpload"> Upload
+            Image Files <img id="fileUp" src="./images/UploadFile.png" style="width: 100px; height: 75px;"><br>
+            <input name="imageFileSelectButton" id="imageFileSelectButton" size="10" multiple="multiple"
+              type="file"></label></div>
+        <div style="display: flex"><label for="imageFileSelectButton"><br>
+          </label></div>
+        <div style="display: flex"><label for="imageFileSelectButton"><br>
+          </label></div>
+        <label for="imageFileSelectButton"><span style="color: #999999; font-family: Times New Roman,Times,serif;"><span
+              style="color: #999999; font-family: Times New Roman,Times,serif;">Tip:
+              Refresh Browser before Uploads&nbsp; &nbsp; <a href="./Guidelines.htm" title="Image Resizer for Windows"
+                target="_blank"><img src="images/ImageResizerForWindows_47x31.png" alt=""
+                  title="Image Resizer for Windows" style="width: 41px; height: 28px;"></a>
+              <a href="./Guidelines.htm" title="Image Resizer for Windows" target="_blank">Upload
+                Guidelines</a> &nbsp;&nbsp;&nbsp;&nbsp; <br>
+            </span></span></label>
+      </div>
+      <!-- Target image div ; Select segmentation WAS here--> &nbsp;
+      &nbsp;&nbsp; <br>
+      <div id="targetImage">
+        <div id="buttons"><input id="minimize" src="./images/minimize.png"
+            onclick="document.getElementById('targetImage').style.height = '40px'" type="image"> <input id="restore"
+            src="./images/zoom.png" onclick="document.getElementById('targetImage').style.height = 'auto'" type="image">
+        </div>
+        <div class="hint"> Upload Segment-Selection Image (optional) : .... </div>
+        <table style="padding-top: 2%;">
+          <tbody>
+            <tr>
+              <td> <label for="segment_user">Segment Images: </label> </td>
+              <td> <input id="segment_user" type="checkbox"> </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="targetSubmit"> <input id="targetSelectButton" size="120" onsubmit="" type="file"> </div>
+        <!-- SEGMENTATION -->
+        <div>
+          <table>
             <tbody>
               <tr>
-                <td> <label for="segment_user">Segment Images: </label> </td>
-                <td> <input id="segment_user" type="checkbox"> </td>
+                <td> <label for="segment_user_row"># Rows: </label> </td>
+                <td> <input value="3" id="segment_user_row" type="number"> </td>
+              </tr>
+              <tr>
+                <td> <label for="segment_user_col"># Columns: </label> </td>
+                <td> <input value="3" id="segment_user_col" type="number"> </td>
               </tr>
             </tbody>
           </table>
-          <div id="targetSubmit"> <input id="targetSelectButton" size="120" onsubmit=""
-              type="file"> </div>
-          <!-- SEGMENTATION -->
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <td> <label for="segment_user_row"># Rows: </label> </td>
-                  <td> <input value="3" id="segment_user_row" type="number"> </td>
-                </tr>
-                <tr>
-                  <td> <label for="segment_user_col"># Columns: </label> </td>
-                  <td> <input value="3" id="segment_user_col" type="number"> </td>
-                </tr>
-              </tbody>
-            </table>
-            <button class="targetButton" onclick="
+          <button class="targetButton"
+            onclick="
                 if(targetSelectButton.value == '') {                  alert('Please select only one file!');                  return;                  } else if(!validFile(targetSelectButton.value)) {                    alert('File must end in .jpeg, .png, .tiff, .bmp');                     return;                     } showTarget(targetSelectButton);">
-              Display / Segment Image </button>
-            <div id="source" style="display:none;"> </div>
-            <div id="temp_canvas" style="display:none;"> </div>
-            <table id="test_table">
-            </table>
-            <!-- SEGMENTATION --> </div>
-          <img id="tgtImg" src="">
-          <div> - Click 'Display /Segment Image' and de-select all segments you
-            do not wish to scan. <br>
-            - When finished, click 'Scan Image Files'. </div>
+            Display / Segment Image </button>
+          <div id="source" style="display:none;"> </div>
+          <div id="temp_canvas" style="display:none;"> </div>
+          <table id="test_table">
+          </table>
+          <!-- SEGMENTATION -->
         </div>
-        <!-- This is the OPTIONAL image view on the top right -->
-        <div id="settingsSection" style="float: left; width: 440px;">
-          <div style="float: left">
-            <div id="ModelOptionsHeading"> Search Category
-              <!-- <div id="tooltip1"> <img id="tooltipimg1" src="./images/tooltip.png"> 
+        <img id="tgtImg" src="">
+        <div> - Click 'Display /Segment Image' and de-select all segments you
+          do not wish to scan. <br>
+          - When finished, click 'Scan Image Files'. </div>
+      </div>
+      <!-- This is the OPTIONAL image view on the top right -->
+      <div id="settingsSection" style="float: left; width: 440px;">
+        <div style="float: left">
+          <div id="ModelOptionsHeading"> Search Category
+            <!-- <div id="tooltip1"> <img id="tooltipimg1" src="./images/tooltip.png"> 
             <span id="tooltiptext1" class="tooltipStyle">              Select an image recognition search category            </span>          </div> -->
-            </div>
-            <!-- Radio buttons to select persons, vehicles, custom -->
-            <!-- <div id="modelOptionSelection">
+          </div>
+          <!-- Radio buttons to select persons, vehicles, custom -->
+          <!-- <div id="modelOptionSelection">
         <div id="modelOptionRadioButtons"> -->
-            <!-- Radio buttons to select model -->
-            <!-- <form id="radioButtonSelections" action="">
+          <!-- Radio buttons to select model -->
+          <!-- <form id="radioButtonSelections" action="">
             <label>              <input id="appGeneral" name="model" value="general" type="radio">              General            </label>            <label>              <input id="appColor" name="model" value="color" type="radio">              Color            </label>            <label>              <input id="appPersons" name="model" value="Persons App." type="radio" checked>              Persons            </label>            <label>              <input id="appHelicopters" name="model" value="Helicopters Crashed" type="radio">              Crashed Helicopters            </label>            <label>              <input id="appAircraft" name="model" value="Aircraft Crashed" type="radio">              Crashed Aircraft            </label> -->
-            <!-- <input id="appCustom" name="model" value="custom" checked="checked" type="radio">
+          <!-- <input id="appCustom" name="model" value="custom" checked="checked" type="radio">
                       Custom                      <select id="customModelDropDown" form="radioButtonSelections">                        <option value="Persons App.">Persons</option>                        <option value="Helicopters Crashed">Crashed Helicopters</option>                        <option value="Aircraft Crashed">Crashed Aircraft</option>                      </select> -->
-            <!-- </form> -->
-            <form id="radioButtonSelections" action=""> <label> <input id="appGeneral"
-                  name="model" value="general" type="radio"> General - <a href="./keywords.htm"
-                  target="_blank">Keyword list</a> </label> <br>
-              <label> <input id="appColor" name="model" value="color" type="radio">
-                Color - <a href="./colors_page/colors.htm" target="_blank">Color
-                  palette <img src="images/0.png" height="15"></a> </label> <br>
-              <label> <input id="appCustom" name="model" value="custom" checked="checked"
-                  type="radio"> Custom </label>
-              <select id="customModelDropDown" form="radioButtonSelections">
-                <option value="Persons App.">Persons</option>
-                <option value="Helicopters Crashed">Crashed Helicopters</option>
-                <option value="Aircraft Crashed">Crashed Aircraft</option>
-              </select>
-            </form>
-          </div>
-          <!-- Select Threshold -->
-          <div style="float: left">
-            <div id="thresholdInput"> <label for="thresholdInputText">
-                <div id="categorytitle" style="padding-bottom: 5px; padding-top: 10px;">Confidence
-                  Threshold</div>
-              </label>
-              <!-- <div id="tooltip2"> 
+          <!-- </form> -->
+          <form id="radioButtonSelections" action=""> <label> <input id="appGeneral" name="model" value="general"
+                type="radio"> General - <a href="./keywords.htm" target="_blank">Keyword list</a> </label> <br>
+            <label> <input id="appColor" name="model" value="color" type="radio">
+              Color - <a href="./colors_page/colors.htm" target="_blank">Color
+                palette <img src="images/0.png" height="15"></a> </label> <br>
+            <label> <input id="appCustom" name="model" value="custom" checked="checked" type="radio"> Custom </label>
+            <select id="customModelDropDown" form="radioButtonSelections">
+              <option value="Persons App.">Persons</option>
+              <option value="Helicopters Crashed">Crashed Helicopters</option>
+              <option value="Aircraft Crashed">Crashed Aircraft</option>
+            </select>
+          </form>
+        </div>
+        <!-- Select Threshold -->
+        <div style="float: left">
+          <div id="thresholdInput"> <label for="thresholdInputText">
+              <div id="categorytitle" style="padding-bottom: 5px; padding-top: 10px;">Confidence
+                Threshold</div>
+            </label>
+            <!-- <div id="tooltip2"> 
                     <img id="tooltipimg2" src="./images/tooltip.png">                    <span id="tooltiptext2" class="tooltipStyle">                      Adjust the %Score confidence threshold to limit the displayed search results.                    </span>                   </div> -->
-              <input id="thresholdInputText" size="3" type="text">
-              <!-- Text after the floating input box --> % Score
-              <!-- End of modelOption radiobutton div --> </div>
-          </div>
-          <div>
-            <div id="segment_info"> Segment Images<b><a href="http://www.sartechnology.ca/imagerecognition-segmentation/"
-                  target="_blank" style="font-family: Times New Roman,Times,serif;">
-                  <br>
-                </a></b></div>
-            <div>&nbsp; <input id="segment_user_2" type="checkbox"> <label for="segment_user_2">Enabled&nbsp;</label>
-            </div>
-            <div class="num_segment_display">&nbsp; Rows: <span id="num_rows">None</span>
-            </div>
-            <div class="num_segment_display">&nbsp; Columns: <span id="num_columns">None</span>
-            </div>
-            <div class="num_segment_display">Total Segments: <span id="num_segment">None</span>
-            </div>
-          </div>
-          <div><br>
-            <div id="EXIFToggleHeading" style="text-align: left; width: 419px;">
-              Display Image
-              Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
-            <form id="exifToggleSelections" action="" style="width: 399px;"> <label>
-                <input id="exifOn" name="exif" value="on" checked="checked" type="checkbox">
-                Enabled &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><label><span
-                  style="color: #999999; font-family: Times New Roman,Times,serif;"><span
-                    style="color: #999999; font-family: Times New Roman,Times,serif;">&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="./Guidelines.htm" title="Segmentation Guidelines for Target Objects"
-                      target="_blank"><img src="images/PersonSegments_48x35.png"
-                        alt="" title="Segment Guidelines for Objects" style="width: 31px; height: 23px;"></a>
-                    <a href="./Guidelines.htm" target="_blank" title="Segmentation Guidelines for Target Objects">Segment
-                      Guidelines</a></span></span><span style="color: #999999;"><br>
-                </span></label> </form>
+            <input id="thresholdInputText" size="3" type="text">
+            <!-- Text after the floating input box --> % Score
+            <!-- End of modelOption radiobutton div -->
           </div>
         </div>
+        <div>
+          <div id="segment_info"> Segment Images<b><a href="http://www.sartechnology.ca/imagerecognition-segmentation/"
+                target="_blank" style="font-family: Times New Roman,Times,serif;">
+                <br>
+              </a></b></div>
+          <div>&nbsp; <input id="segment_user_2" type="checkbox"> <label for="segment_user_2">Enabled&nbsp;</label>
+          </div>
+          <div class="num_segment_display">&nbsp; Rows: <span id="num_rows">None</span>
+          </div>
+          <div class="num_segment_display">&nbsp; Columns: <span id="num_columns">None</span>
+          </div>
+          <div class="num_segment_display">Total Segments: <span id="num_segment">None</span>
+          </div>
+        </div>
+        <div><br>
+          <div id="EXIFToggleHeading" style="text-align: left; width: 419px;">
+            Display Image
+            Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
+          <form id="exifToggleSelections" action="" style="width: 399px;"> <label>
+              <input id="exifOn" name="exif" value="on" checked="checked" type="checkbox">
+              Enabled &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><label><span
+                style="color: #999999; font-family: Times New Roman,Times,serif;"><span
+                  style="color: #999999; font-family: Times New Roman,Times,serif;">&nbsp;&nbsp;&nbsp;&nbsp;
+                  <a href="./Guidelines.htm" title="Segmentation Guidelines for Target Objects" target="_blank"><img
+                      src="images/PersonSegments_48x35.png" alt="" title="Segment Guidelines for Objects"
+                      style="width: 31px; height: 23px;"></a>
+                  <a href="./Guidelines.htm" target="_blank" title="Segmentation Guidelines for Target Objects">Segment
+                    Guidelines</a></span></span><span style="color: #999999;"><br>
+              </span></label> </form>
+        </div>
       </div>
-      <!-- End of fileUploadSection div -->
-      <!-- End of imageSelect Section -->
-      <div style="clear: left; width: 975px; text-align: center; margin: auto;">
-        <br>
-        <label for="filePathInput" class="fileInput"> <input id="filePathInput"
-            placeholder="Enter File-Path (optional)" size="140" onclick="if(this.value!=' ') this.value = ' '"
-            type="text"> </label>
-        <!-- <span id="tooltip4"> 
+    </div>
+    <!-- End of fileUploadSection div -->
+    <!-- End of imageSelect Section -->
+    <div style="clear: left; width: 975px; text-align: center; margin: auto;">
+      <br>
+      <label for="filePathInput" class="fileInput"> <input id="filePathInput" placeholder="Enter File-Path (optional)"
+          size="140" onclick="if(this.value!=' ') this.value = ' '" type="text"> </label>
+      <!-- <span id="tooltip4"> 
         <img id="tooltipimg4" src="./images/tooltip.png" style="width: 21px; height: 21px;">         <span id="tooltiptext4" class="tooltipStyle">          The folder file-path will appear in the 'Details' column.        </span>       </span> -->
-        <!-- End Tooltip4 --> <button class="predictButton" onclick=" if(imageFolderSelectButton.value == '' &amp;&amp; imageFileSelectButton.value == '') {
+      <!-- End Tooltip4 --> <button class="predictButton"
+        onclick=" if(imageFolderSelectButton.value == '' &amp;&amp; imageFileSelectButton.value == '') {
         alert('Please select at least one file!');                            return; }        else if(imageFolderSelectButton.value != '' &amp;&amp; imageFileSelectButton.value != '') {        document.getElementById('imageFolderSelectButton').value = '';        document.getElementById('imageFileSelectButton').value = '';         alert('Please use only one upload method at a time.');                                return; }                            else if(!validFile(imageFolderSelectButton.value) &amp;&amp; !validFile(imageFileSelectButton.value)) {         alert('File must end in .jpeg, .png, .tiff, .bmp');                                return; }        if(imageFolderSelectButton.value != '') {          showFileName(imageFolderSelectButton);        }        else {          showFileName(imageFileSelectButton);        }        ">
-          <b style="color: #000066;">Scan Image Files</b>&nbsp;</button>
-        <!-- <span id="tooltip5"> 
+        <b style="color: #000066;">Scan Image Files</b>&nbsp;</button>
+      <!-- <span id="tooltip5"> 
           <img id="tooltipimg5" src="./images/tooltip.png" style="width: 21px; height: 21px;">           <span id="tooltiptext5" class="tooltipStyle">            Displays recognition results above the threshold %Score value.          </span>         </span> -->
-        <!-- End Tooltip5 -->
-        <div> <span id="imageProcessed" style="margin: auto;">Images Processed:
-            0 /</span> <span id="totalProcessed">0</span> <img src="./images/loading.gif"
-            id="loader"> </div>
-      </div>
-      <!-- Loading circle -->
-      <!-- End of Flexwrap -->
-      <div style="text-align: center; margin-top: 5px">
-        <div style="margin-left: 1%; padding-left: 0.5%; display: inline-block; text-align: left;">&nbsp;
-          <label for="notes" style="font-size: 1em; font-weight: bold;" id="BackgroundImage">Comments:<br>
-            <textarea style="font-weight:bold; font-size: 18px" id="notes" cols="50"
-rows="3"></textarea> </label></div>
-        <div style="padding-left: 0.5%; display: inline-block; text-align: left">&nbsp;
-          <label for="notes" style="font-size:1em; font-weight: bold;">Search-For
-            Keywords:<br>
-            <textarea style="font-weight:bold; font-size: 18px" id="notes" cols="50"
-rows="3"></textarea> </label></div>
-      </div>
-      <div class="resultFormatting" style="clear: left;"> <img id="logoIcon" src="./images/PixelSquare.png"
-          style="width: 28px; height: 28px;"> <img id="magnify" src="./images/MagnifyingGlassBlue.png"
-          style="width: 29px; height: 29px;"> Report Results: </div>
-      <div id="tooltip5">
-        <div style="margin-left:1em;"> <span id="tooltiptext5" class="tooltipStyle">
-            Please ignore or accept all browser Wait-prompts until finished </span>
-        </div>
-      </div>
       <!-- End Tooltip5 -->
-      <div id="imagePreview"></div>
-      <div id="tags"></div>
-      <div id="fileProperties">
-        <table id="results">
-        </table>
+      <div> <span id="imageProcessed" style="margin: auto;">Images Processed:
+          0 /</span> <span id="totalProcessed">0</span> <img src="./images/loading.gif" id="loader"> </div>
+    </div>
+    <!-- Loading circle -->
+    <!-- End of Flexwrap -->
+    <div style="text-align: center; margin-top: 5px">
+      <div style="margin-left: 1%; padding-left: 0.5%; display: inline-block; text-align: left;">&nbsp;
+        <label for="notes" style="font-size: 1em; font-weight: bold;" id="BackgroundImage">Comments:<br>
+          <textarea style="font-weight:bold; font-size: 18px" id="notes" cols="50" rows="3"></textarea> </label></div>
+      <div style="padding-left: 0.5%; display: inline-block; text-align: left">&nbsp;
+        <label for="notes" style="font-size:1em; font-weight: bold;">Search-For
+          Keywords:<br>
+          <textarea style="font-weight:bold; font-size: 18px" id="notes" cols="50" rows="3"></textarea> </label></div>
+    </div>
+    <div class="resultFormatting" style="clear: left;"> <img id="logoIcon" src="./images/PixelSquare.png"
+        style="width: 28px; height: 28px;"> <img id="magnify" src="./images/MagnifyingGlassBlue.png"
+        style="width: 29px; height: 29px;"> Report Results: </div>
+    <div id="tooltip5">
+      <div style="margin-left:1em;"> <span id="tooltiptext5" class="tooltipStyle">
+          Please ignore or accept all browser Wait-prompts until finished </span>
       </div>
-      <!-- End of file Properties section -->
-      <script>
+    </div>
+    <!-- End Tooltip5 -->
+    <div id="imagePreview"></div>
+    <div id="tags"></div>
+    <div id="fileProperties">
+      <table id="results">
+      </table>
+    </div>
+    <!-- End of file Properties section -->
+    <script>
       function handleDroppedFile(e) {
         e.preventDefault();
         var dT = e.originalEvent.dataTransfer;
         var files = dT.files;
-        for (var i=0; i<files.length; i++) { 
+        for (var i = 0; i < files.length; i++) {
           if (files[i].type == '' && files[i].size % 4096 == 0) {
             alert('Please drag and drop images only.');
             this.classList.remove('draggedOver');
@@ -299,34 +300,34 @@ rows="3"></textarea> </label></div>
           this.classList.add('notDraggedOver');
         });
 
-      function chkbox_sync(){
+      function chkbox_sync() {
         var seg1 = this.checked;
         var user_seg1 = document.getElementById('segment_user');
         var user_seg2 = document.getElementById('segment_user_2');
         user_seg1.checked = seg1;
         user_seg2.checked = seg1;
-        if (this.checked == false){
+        if (this.checked == false) {
           document.getElementById('num_rows').innerHTML = 'None'
           document.getElementById('num_columns').innerHTML = 'None'
           document.getElementById('num_segment').innerHTML = 'None'
 
-        }else{
+        } else {
           var user_seg_row = document.getElementById('segment_user_row').value;
           var user_seg_col = document.getElementById('segment_user_col').value;
           document.getElementById('num_rows').innerHTML = user_seg_row.toString();
           document.getElementById('num_columns').innerHTML = user_seg_col.toString();
-          document.getElementById('num_segment').innerHTML = (user_seg_col*user_seg_row).toString();
+          document.getElementById('num_segment').innerHTML = (user_seg_col * user_seg_row).toString();
         }
       }
 
-      function new_num_seg(){
+      function new_num_seg() {
         var user_seg1 = document.getElementById('segment_user').checked;
-        if (user_seg1){
+        if (user_seg1) {
           var user_seg_row = document.getElementById('segment_user_row').value;
           var user_seg_col = document.getElementById('segment_user_col').value;
           document.getElementById('num_rows').innerHTML = user_seg_row.toString();
           document.getElementById('num_columns').innerHTML = user_seg_col.toString();
-          document.getElementById('num_segment').innerHTML = (user_seg_col*user_seg_row).toString();
+          document.getElementById('num_segment').innerHTML = (user_seg_col * user_seg_row).toString();
         }
       }
 
@@ -346,7 +347,7 @@ rows="3"></textarea> </label></div>
       //     this.classList.remove('dragged-over')
       //   });
 
-    
+
     //   let dropArea = document.getElementById('imageSelectSection')
 
     // function preventDefaults (e) {
@@ -369,6 +370,8 @@ rows="3"></textarea> </label></div>
     // function unhighlight(e) {
     //   dropArea.classList.remove('highlight')
     // }
-    </script> </div>
-  </body>
+    </script>
+  </div>
+</body>
+
 </html>
