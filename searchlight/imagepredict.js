@@ -599,11 +599,14 @@ $(document).ready(function() {
             var arr = api.columns(2).data()[0];  //get array of column 2 (score)
             var sorted = arr.slice().sort(function(a,b){return b-a});
             var ranks = arr.slice().map(function(v){ return sorted.indexOf(v)+1 });
+            let newRanks = [];
+            for (let i = 0; i < ranks.length; i ++){
+                newRanks.push(i + 1);
+            }
             // interate through each row
             api.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-              var data = this.data();
-            // data[1] = '#' + ranks[arr.indexOf(data[2])] + ' of ' + Math.max(...ranks);  //set the rank column = the array index of the score in the ranked array?
-            data[1] = '#' + ranks[arr.indexOf(data[2])] + ' of ' + ranks.length;  //set the rank column = the array index of the score in the ranked array
+                var data = this.data();
+                data[1] = '#' + newRanks[rowLoop] + ' of ' + ranks.length;  //set the rank column = the array index of the score in the ranked array
 
             } );
           api.rows().invalidate();
