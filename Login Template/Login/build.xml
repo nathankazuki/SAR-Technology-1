@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<project name="nation" default="full-suite" basedir=".">
+ 
+    <!-- GLOBAL VARIABLES -->
+    <property name="source" value="app" />
+    <!-- END -->
+ 
+    <!-- AVAILABLE COMMANDS -->
+    <target name="full-suite" depends="npm , test" />
+    <!-- END -->
+ 
+    <!-- runs npm install -->
+    <target name="npm">
+        <echo message="Running npm ..."/>
+        <exec executable="npm.cmd" failonerror="true">
+        <arg value = "install"/>
+        </exec>
+    </target>
+
+    <target name = "test">
+        <echo message ="Running tests ..."/>
+        <exec executable = "npm.cmd" failonerror="true">
+        <arg value = "test"/>
+        </exec>
+    </target>
+    <!-- END -->
+ 
+ </project>
