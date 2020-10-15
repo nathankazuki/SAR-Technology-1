@@ -1,0 +1,114 @@
+nav {
+    margin-top: 0;
+}
+
+
+
+.background {
+    background-image: url("../Images/black.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+.character{
+    background-image: url("../Images/black.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+.character1{
+    background-image: url("../Images/black.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+
+
+
+.fight{
+    background-image: url("../Images/black.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+
+
+}
+
+.lightbox {
+    background:rgba(61, 55, 55,0.4);
+    border: 20px solid rgb(0, 0, 0);
+    padding: 50px;
+    width: 100%;
+    float: none;
+    display: inline-block;
+    border-radius: 25px;
+    margin: 0 auto;
+    text-align: center;
+    color: white;
+}
+.title {
+    text-align: Center;
+    color: #E3E3E3;
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 53px;
+}
+
+.center {
+    align-self: center;
+    background-color:black;
+    margin: 20px;
+    padding: 20px;
+    border-style: ridge;
+}
+
+.nav_text{
+    color: #E3E3E3;
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 20px;
+}
+
+.container{
+    margin-top: 30px;
+    background-color: transparent;
+    /*background: rgba(0, 0, 0, 0.7);*/
+}
+
+.container1{
+    margin-top: 30px;
+    /*background-color: transparent;*/
+    background: rgba(0, 0, 0, 0.7);
+}
+
+body{
+    background-image: url("../Images/black.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    /*background: rgba(0, 0, 0, 0.3);*/
+}
+
+.jumbotron {
+    background: none;
+    color: white;
+    height: 15vh;
+    border-bottom: 10px white;
+
+}
+
+.bg-light{
+    background: rgba(0,0,0,0);
+}
+
+hr{
+    border-top: 1px solid white;
+}
