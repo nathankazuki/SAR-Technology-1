@@ -56,7 +56,7 @@ function scanImage(){
   var scanRef = firebase.database().ref().child('users/' + user.uid);
   scanRef.once('value', snap => remainingScans = snap.val()['scanNumber']);
   remainingScans = remainingScans - 1;
-  writeUserData(userId, email, remainingScans);
+  writeUserData(user.uid, 'first name', 'last name', 'entity name', 'phone number', 'payment method', remainingScans);
 }
 
 function logout(){
