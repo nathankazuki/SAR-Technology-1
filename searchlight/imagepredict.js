@@ -37,6 +37,16 @@ var exifDataArray = [];
  *  input = predict local files button
  *  output = div for results
  */
+
+function checklogin() {
+    // const authUser = Object.keys(window.localStorage).filter(item => item.startsWith('firebase:authUser'))[0]
+    // let storage = window.localStorage;
+    // console.log(authUser);
+    // console.log(storage);
+    let user = firebase.auth();
+    console.log(user);
+}
+
 function showFileName(value) {
     baseArray = [];
     imgArray = [];

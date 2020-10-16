@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Searchlight Image Locator</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/hgWqKCT.png">
@@ -27,10 +28,13 @@
             return lowerImageName.search(/jpg|png|bmp|tiff|jpeg/gi) != -1;
         }
 
+        checklogin()
+
     </script>
     <meta name="author" content="SAR Technology Inc.">
   </head>
   <body>
+    
     <div id="backgroundimage">
       <div id="MainDiv">
         <!-- Navbar -->
