@@ -31,6 +31,7 @@ var currentImageNum = 1;
 var fileExifArray = [];
 var detailsArray = [];
 var exifDataArray = [];
+var scansRemaining = 0;
 /**
  *  Shows file name of selected images.
  *  param: value - an array of files incoming from the HTML
@@ -66,24 +67,27 @@ function showFileName(value) {
     }
 
     //update user-defined segmentation selection
-    isLoading = true;
-    showLoading(isLoading);
-
-    for (var i = 0; i < input.files.length; ++i) {
-        //output.innerHTML += '<li>' +input.files.item(i).name + '     <br>Size: ' +input.files.item(i).size/1000 + ' KB' + '<br>Date: ' +input.files.item(i).lastModifiedDate + '</li><br>';
-        console.log(input.files[i]);
-        if (segment_option){
-            var reader_segment = new FileReader();
-            reader_segment.readAsDataURL(input.files[i]);
-            on_load_segment(input.files[i], total_segment_num).then((result)=> {
-                segmented_api_prep(result[0], result[1], result[2], result[3]);
-            })
-
-        }else{
-            //Turn image into base 64 for clarifai.
-            getBase64(input.files[i], input, input.files);
+    
+    if (scansRemaining > totalImageCount){
+        for (var i = 0; i < input.files.length; ++i) {
+            console.log(input.files[i]);
+            if (segment_option){
+                var reader_segment = new FileReader();
+                reader_segment.readAsDataURL(input.files[i]);
+                on_load_segment(input.files[i], total_segment_num).then((result)=> {
+                    segmented_api_prep(result[0], result[1], result[2], result[3]);
+                })
+    
+            }else{
+                //Turn image into base 64 for clarifai.
+                getBase64(input.files[i], input, input.files);
+            }
         }
     }
+    else{
+        alert("Not enough scans remaining");
+    }
+    
     // Close unordered list tag
 //    output.innerHTML += '</ul>'
 }
@@ -128,11 +132,7 @@ function showTarget(input) {
     }
 }
 
-/*
-"<br>File Name: " + image.files.item(i).name + "<br>Size: " + image.files.item(i).size /1000
-+ " KB" + "<br>Date: " + image.files.item(i).lastModifiedDate;
-*/
-
+// TODO: Check area for API calls
 function getBase64(file, val, fileInput) {
     var reader = new FileReader();
     var exifEnabled = document.getElementById('exifOn');
@@ -362,23 +362,6 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
                                     rows.length = 0
                                 } );
                             }
-
-
-                            // $(document).ready(function() {
-                            //     var t = $('#results').DataTable();
-
-                            //       t.row.add( [
-                            //         thumbNail,
-                            //         "",
-                            //         imgScore,
-                            //         imageTags,
-                            //         exifDetails]
-                            //     ).draw( false );
-                            //     $('#results').on('keyup', function () {
-                            //         t.search(this.value).draw()
-                            //     })
-                            // } );
-
                         }
 
                     }
@@ -594,6 +577,7 @@ $(document).ready(function() {
             { title:"Details" }
         ],
         // Calculate rank of image by score
+        // TODO: Possible Error
         drawCallback: function () {
             api = this.api();
             var arr = api.columns(2).data()[0];  //get array of column 2 (score)
@@ -1043,22 +1027,6 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                                     rows.length = 0
                                 } );
                             }
-
-
-                            // $(document).ready(function() {
-                            //     var t = $('#results').DataTable();
-
-                            //       t.row.add( [
-                            //         thumbNail,
-                            //         "",
-                            //         imgScore,
-                            //         imageTags,
-                            //         exifDetails]
-                            //     ).draw( false );
-                            //     $('#results').on('keyup', function () {
-                            //         t.search(this.value).draw()
-                            //     })
-                            // } );
 
                         }
 

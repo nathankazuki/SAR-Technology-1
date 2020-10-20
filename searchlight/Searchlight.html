@@ -5,6 +5,8 @@
     <title>Searchlight Image Locator</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/hgWqKCT.png">
     <!-- Importing jquery, clarafai sdk, keys.js -->
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
+    <script type="text/javascript"src="firebaseConfig.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="https://sdk.clarifai.com/js/clarifai-latest.js"></script>
     <script type="text/javascript" src="keys.js"></script>
@@ -31,6 +33,14 @@
     <meta name="author" content="SAR Technology Inc.">
   </head>
   <body>
+  <div id="login_div">
+    <input type="email" placeholder="Email..." id="email_field" />
+    <input type="password" placeholder="Password..." id="password_field" />
+    <button onclick="login()">Login to Account</button>
+  </div>
+  <div id="user_div">
+    <button onclick="logout()">Logout</button>
+  </div>
     <div id="backgroundimage">
       <div id="MainDiv">
         <!-- Navbar -->
@@ -205,20 +215,42 @@
       <div style="clear: left; width: 975px; text-align: center; margin: auto;">
         <br>
         <label for="filePathInput" class="fileInput"> <input id="filePathInput"
-            placeholder="Enter File-Path (optional)" size="140" onclick="if(this.value!=' ') this.value = ' '"
-            type="text"> </label>
-        <!-- <span id="tooltip4"> 
-        <img id="tooltipimg4" src="./images/tooltip.png" style="width: 21px; height: 21px;">         <span id="tooltiptext4" class="tooltipStyle">          The folder file-path will appear in the 'Details' column.        </span>       </span> -->
-        <!-- End Tooltip4 --> <button class="predictButton" onclick=" if(imageFolderSelectButton.value == '' &amp;&amp; imageFileSelectButton.value == '') {
-        alert('Please select at least one file!');                            return; }        else if(imageFolderSelectButton.value != '' &amp;&amp; imageFileSelectButton.value != '') {        document.getElementById('imageFolderSelectButton').value = '';        document.getElementById('imageFileSelectButton').value = '';         alert('Please use only one upload method at a time.');                                return; }                            else if(!validFile(imageFolderSelectButton.value) &amp;&amp; !validFile(imageFileSelectButton.value)) {         alert('File must end in .jpeg, .png, .tiff, .bmp');                                return; }        if(imageFolderSelectButton.value != '') {          showFileName(imageFolderSelectButton);        }        else {          showFileName(imageFileSelectButton);        }        ">
+          placeholder="Enter File-Path (optional)" size="140" onclick="if(this.value!=' ') this.value = ' '"
+          type="text">
+        </label>
+        <button class="predictButton" onclick= "if (imageFolderSelectButton.value == '' &amp;&amp; imageFileSelectButton.value == '') {
+                                                  alert('Please select at least one file!');
+                                                  return;
+                                                }
+                                                else if (imageFolderSelectButton.value != '' &amp;&amp; imageFileSelectButton.value != '') {
+                                                  document.getElementById('imageFolderSelectButton').value = '';
+                                                  document.getElementById('imageFileSelectButton').value = '';
+                                                  alert('Please use only one upload method at a time.');
+                                                  return;
+                                                }
+                                                else if (!validFile(imageFolderSelectButton.value) &amp;&amp; !validFile(imageFileSelectButton.value)) {
+                                                  alert('File must end in .jpeg, .png, .tiff, .bmp');
+                                                  return;
+                                                }
+                                                if (imageFolderSelectButton.value != '') {
+                                                  showFileName(imageFolderSelectButton);
+                                                }
+                                                else {
+                                                  showFileName(imageFileSelectButton);
+                                                }
+          ">
           <b style="color: #000066;">Scan Image Files</b>&nbsp;</button>
         <!-- <span id="tooltip5"> 
           <img id="tooltipimg5" src="./images/tooltip.png" style="width: 21px; height: 21px;">           <span id="tooltiptext5" class="tooltipStyle">            Displays recognition results above the threshold %Score value.          </span>         </span> -->
         <!-- End Tooltip5 -->
-        <div> <span id="imageProcessed" style="margin: auto;">Images Processed:
-            0 /</span> <span id="totalProcessed">0</span> <img src="./images/loading.gif"
-            id="loader"> </div>
+      <div> 
+        <span id="imageProcessed" style="margin: auto;">Images Processed: 0 /</span> <span id="totalProcessed">0</span>
+        <img src="./images/loading.gif" id="loader"> </div>
+        <br>
+        <span id="scansRemaining" style="margin: auto;">Scans Remaining: 0</span>
       </div>
+      <!--firebaseFunctions must be called after initializing login-->
+      <script type="text/javascript"src="firebaseFunctions.js"></script>
       <!-- Loading circle -->
       <!-- End of Flexwrap -->
       <div style="text-align: center; margin-top: 5px">
@@ -267,24 +299,6 @@ rows="3"></textarea> </label></div>
         this.classList.remove('draggedOver');
         this.classList.add('notDraggedOver');
       }
-
-      // function handleDroppedFolder(e) {
-      //   e.preventDefault();
-      //   var magicItems = []
-      //   var dT = e.dataTransfer;
-      //   var items = dT.items;
-      //   for (var i=0; i<items.length; i++) {
-      //     var item = items[i].webkitGetAsEntry();
-      //     if (item) {
-      //       magicItems.push(item)
-      //     }
-      //   }
-      //   console.log(magicItems)
-      //   if (items && items.length) {
-      //     $('#imageFolderSelectButton')[0].files = magicItems;
-      //   }
-      // }
-
       $('#imageSelectSection').on({
         'drop': handleDroppedFile,
         'dragenter': function (e) { e.preventDefault(); },
@@ -334,41 +348,7 @@ rows="3"></textarea> </label></div>
       document.getElementById('segment_user_2').addEventListener('change', chkbox_sync);
       document.getElementById('segment_user_row').addEventListener('change', new_num_seg);
       document.getElementById('segment_user_col').addEventListener('change', new_num_seg);
-      // $('#folderUpload').on({
-      //   'drop': handleDroppedFolder,
-      //   'dragenter': function (e) { e.preventDefault(); },
-      //   'dragover': function (e) {
-      //     e.preventDefault();
-      //     this.classList.add('dragged-over');
-      //   }
-      // })
-      //   .on('dragleave dragexit', function () {
-      //     this.classList.remove('dragged-over')
-      //   });
 
-    
-    //   let dropArea = document.getElementById('imageSelectSection')
-
-    // function preventDefaults (e) {
-    //   e.preventDefault()
-    //   e.stopPropagation()
-    // }
-
-    // ;['dragenter', 'dragover'].forEach(eventName => {
-    //   dropArea.addEventListener(eventName, highlight, false)
-    // })
-
-    // ;['dragleave', 'drop'].forEach(eventName => {
-    //   dropArea.addEventListener(eventName, unhighlight, false)
-    // })
-
-    // function highlight(e) {
-    //   dropArea.classList.add('highlight')
-    // }
-
-    // function unhighlight(e) {
-    //   dropArea.classList.remove('highlight')
-    // }
     </script> </div>
   </body>
 </html>
