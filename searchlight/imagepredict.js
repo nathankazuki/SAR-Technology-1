@@ -55,7 +55,8 @@ function showFileName(value) {
 
     if (segment_option){
         if (segment_selection.length < 1){
-            window.alert("Segmentation is enabled. Please select the segments with the selection box in the upper right.");
+            //window.swal("Scan Error", "Segmentation is enabled. Please select the segments with the selection box in the upper right", "error");
+            window.alert("Scan Error", "Segmentation is enabled. Please select the segments with the selection box in the upper right", "error");
             return
         }
 
@@ -86,6 +87,7 @@ function showFileName(value) {
     }
     else{
         alert("Not enough scans remaining");
+        //swal("Scan Error", "The scan was unable to be completed", "error");
     }
     
     // Close unordered list tag
