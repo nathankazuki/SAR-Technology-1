@@ -5,8 +5,6 @@
     <title>Searchlight Image Locator</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/hgWqKCT.png">
     <!-- Importing jquery, clarafai sdk, keys.js -->
-    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
-    <script type="text/javascript"src="firebaseConfig.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="https://sdk.clarifai.com/js/clarifai-latest.js"></script>
     <script type="text/javascript" src="keys.js"></script>
@@ -19,28 +17,18 @@
     <script type="text/javascript" src="buttons.html5.min.js"></script>
     <script type="text/javascript" src="jszip.min.js"></script>
     <script type="text/javascript" src="natural.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Copied from original because it seemed important -->
     <script>
-
-
         // Checks for valid image type
         function validFile(imageName) {
             var lowerImageName = imageName.toLowerCase();
             return lowerImageName.search(/jpg|png|bmp|tiff|jpeg/gi) != -1;
         }
-
     </script>
     <meta name="author" content="SAR Technology Inc.">
   </head>
   <body>
-  <div id="login_div">
-    <input type="email" placeholder="Email..." id="email_field" />
-    <input type="password" placeholder="Password..." id="password_field" />
-    <button onclick="login()">Login to Account</button>
-  </div>
-  <div id="user_div">
-    <button onclick="logout()">Logout</button>
-  </div>
     <div id="backgroundimage">
       <div id="MainDiv">
         <!-- Navbar -->
@@ -59,13 +47,6 @@
       </div>
       <div id="boxContainer">
         <div id="imageSelectSection" class="notDraggedOver" style="float: left; margin-right: 1%; width: 440px;">
-          <div class="flexwrap">
-            <!-- This is just to make position: relative work -->
-            <!-- <div class="fileUpload">
-          <img id="arrow" src="./images/UploadArrowBlue.png" style="width: 25px; height: 25px;">          <img id="imageUp" src="./images/ImageCommanderIconBlue.png" style="width: 25px; height: 25px;">          Upload Image Files        </div> -->
-            <!-- <div id="tooltip3"> 
-          <img id="tooltipimg3" src="./images/tooltip.png">           <span id="tooltiptext3" class="tooltipStyle">            Tips: Max-Upload 200 images (jpg or png). Max-FileSize 400KB per image.          </span>         </div> -->
-            <!-- End Tooltip3 --> </div>
           <!-- End flexwrap -->
           <!-- File UploadSection div -->
           <div id="fileUploadSection" style="display: flex"> <label for="imageFolderSelectButton"
@@ -112,17 +93,17 @@
             <table>
               <tbody>
                 <tr>
-                  <td> <label for="segment_user_row"># Rows: </label> </td>
-                  <td> <input value="3" id="segment_user_row" type="number"> </td>
-                </tr>
-                <tr>
                   <td> <label for="segment_user_col"># Columns: </label> </td>
                   <td> <input value="3" id="segment_user_col" type="number"> </td>
+                </tr>
+                <tr>
+                  <td> <label for="segment_user_row"># Rows: </label> </td>
+                  <td> <input value="3" id="segment_user_row" type="number"> </td>
                 </tr>
               </tbody>
             </table>
             <button class="targetButton" onclick="
-                if(targetSelectButton.value == '') {                  alert('Please select only one file!');                  return;                  } else if(!validFile(targetSelectButton.value)) {                    alert('File must end in .jpeg, .png, .tiff, .bmp');                     return;                     } showTarget(targetSelectButton);">
+                if(targetSelectButton.value == '') {                  swal('No File Selected', 'Please select at least one file', 'error');                  return;                  } else if(!validFile(targetSelectButton.value)) {                    swal('Invalid File Type', 'File must end in .jpeg, .png, .tiff, .bmp', 'error');                     return;                     } showTarget(targetSelectButton);">
               Display / Segment Image </button>
             <div id="source" style="display:none;"> </div>
             <div id="temp_canvas" style="display:none;"> </div>
@@ -137,25 +118,24 @@
         <!-- This is the OPTIONAL image view on the top right -->
         <div id="settingsSection" style="float: left; width: 440px;">
           <div style="float: left">
-            <div id="ModelOptionsHeading"> Search Category
-              <!-- <div id="tooltip1"> <img id="tooltipimg1" src="./images/tooltip.png"> 
-            <span id="tooltiptext1" class="tooltipStyle">              Select an image recognition search category            </span>          </div> -->
-            </div>
-            <!-- Radio buttons to select persons, vehicles, custom -->
-            <!-- <div id="modelOptionSelection">
-        <div id="modelOptionRadioButtons"> -->
-            <!-- Radio buttons to select model -->
-            <!-- <form id="radioButtonSelections" action="">
-            <label>              <input id="appGeneral" name="model" value="general" type="radio">              General            </label>            <label>              <input id="appColor" name="model" value="color" type="radio">              Color            </label>            <label>              <input id="appPersons" name="model" value="Persons App." type="radio" checked>              Persons            </label>            <label>              <input id="appHelicopters" name="model" value="Helicopters Crashed" type="radio">              Crashed Helicopters            </label>            <label>              <input id="appAircraft" name="model" value="Aircraft Crashed" type="radio">              Crashed Aircraft            </label> -->
-            <!-- <input id="appCustom" name="model" value="custom" checked="checked" type="radio">
-                      Custom                      <select id="customModelDropDown" form="radioButtonSelections">                        <option value="Persons App.">Persons</option>                        <option value="Helicopters Crashed">Crashed Helicopters</option>                        <option value="Aircraft Crashed">Crashed Aircraft</option>                      </select> -->
-            <!-- </form> -->
-            <form id="radioButtonSelections" action=""> <label> <input id="appGeneral"
-                  name="model" value="general" type="radio"> General - <a href="./keywords.htm"
-                  target="_blank">Keyword list</a> </label> <br>
-              <label> <input id="appColor" name="model" value="color" type="radio">
-                Color - <a href="./colors_page/colors.htm" target="_blank">Color
-                  palette <img src="images/0.png" height="15"></a> </label> <br>
+            <div id="ModelOptionsHeading"> Search Category</div>
+            <form id="radioButtonSelections" action=""> 
+              <label> 
+                <input id="appGeneral" 
+                       name="model" 
+                       value="general" 
+                       type="radio"> 
+                General - <a href="./keywords.htm" target="_blank">Keyword list</a> 
+              </label> 
+              <br>
+              <label> 
+                <input id="appColor" 
+                       name="model" 
+                       value="color" 
+                       type="radio"> 
+                Color - <a href="./colors_page/colors.htm" target="_blank"> Color palette <img src="images/0.png" height="15"></a> 
+              </label> 
+              <br>
               <label> <input id="appCustom" name="model" value="custom" checked="checked"
                   type="radio"> Custom </label>
               <select id="customModelDropDown" form="radioButtonSelections">
@@ -167,12 +147,10 @@
           </div>
           <!-- Select Threshold -->
           <div style="float: left">
-            <div id="thresholdInput"> <label for="thresholdInputText">
-                <div id="categorytitle" style="padding-bottom: 5px; padding-top: 10px;">Confidence
-                  Threshold</div>
+            <div id="thresholdInput"> 
+              <label for="thresholdInputText">
+                <div id="categorytitle" style="padding-bottom: 5px; padding-top: 10px;">Confidence Threshold</div>
               </label>
-              <!-- <div id="tooltip2"> 
-                    <img id="tooltipimg2" src="./images/tooltip.png">                    <span id="tooltiptext2" class="tooltipStyle">                      Adjust the %Score confidence threshold to limit the displayed search results.                    </span>                   </div> -->
               <input id="thresholdInputText" size="3" type="text">
               <!-- Text after the floating input box --> % Score
               <!-- End of modelOption radiobutton div --> </div>
@@ -184,9 +162,9 @@
                 </a></b></div>
             <div>&nbsp; <input id="segment_user_2" type="checkbox"> <label for="segment_user_2">Enabled&nbsp;</label>
             </div>
-            <div class="num_segment_display">&nbsp; Rows: <span id="num_rows">None</span>
-            </div>
             <div class="num_segment_display">&nbsp; Columns: <span id="num_columns">None</span>
+            </div>
+            <div class="num_segment_display">&nbsp; Rows: <span id="num_rows">None</span>
             </div>
             <div class="num_segment_display">Total Segments: <span id="num_segment">None</span>
             </div>
@@ -215,42 +193,35 @@
       <div style="clear: left; width: 975px; text-align: center; margin: auto;">
         <br>
         <label for="filePathInput" class="fileInput"> <input id="filePathInput"
-          placeholder="Enter File-Path (optional)" size="140" onclick="if(this.value!=' ') this.value = ' '"
-          type="text">
-        </label>
-        <button class="predictButton" onclick= "if (imageFolderSelectButton.value == '' &amp;&amp; imageFileSelectButton.value == '') {
-                                                  alert('Please select at least one file!');
-                                                  return;
-                                                }
-                                                else if (imageFolderSelectButton.value != '' &amp;&amp; imageFileSelectButton.value != '') {
-                                                  document.getElementById('imageFolderSelectButton').value = '';
-                                                  document.getElementById('imageFileSelectButton').value = '';
-                                                  alert('Please use only one upload method at a time.');
-                                                  return;
-                                                }
-                                                else if (!validFile(imageFolderSelectButton.value) &amp;&amp; !validFile(imageFileSelectButton.value)) {
-                                                  alert('File must end in .jpeg, .png, .tiff, .bmp');
-                                                  return;
-                                                }
-                                                if (imageFolderSelectButton.value != '') {
-                                                  showFileName(imageFolderSelectButton);
-                                                }
-                                                else {
-                                                  showFileName(imageFileSelectButton);
-                                                }
-          ">
+            placeholder="Enter File-Path (optional)" size="140" onclick="if(this.value!=' ') this.value = ' '"
+            type="text"> </label>
+        <button class="predictButton" onclick=" 
+          if ((imageFolderSelectButton.value == '') && (imageFileSelectButton.value == '')) {
+            swal('No File Selected', 'Please select at least one file', 'error');                            
+            return; 
+          } else if ((imageFolderSelectButton.value != '') && (imageFileSelectButton.value != '')) { 
+            document.getElementById('imageFolderSelectButton').value = '';        
+            document.getElementById('imageFileSelectButton').value = '';         
+            swal('Multiple Upload Methods Detected', 'Please use only one upload method at a time','error');                                
+            return; 
+          } else if ((!validFile(imageFolderSelectButton.value)) && (!validFile(imageFileSelectButton.value))) {         
+            swal('Invalid File Type', 'File must end in .jpeg, .png, .tiff, .bmp', 'error');                                
+            return; 
+          } 
+          if (imageFolderSelectButton.value != '') { 
+            showFileName(imageFolderSelectButton);        
+          } else {          
+            showFileName(imageFileSelectButton);        
+          }        
+        ">
           <b style="color: #000066;">Scan Image Files</b>&nbsp;</button>
-        <!-- <span id="tooltip5"> 
-          <img id="tooltipimg5" src="./images/tooltip.png" style="width: 21px; height: 21px;">           <span id="tooltiptext5" class="tooltipStyle">            Displays recognition results above the threshold %Score value.          </span>         </span> -->
         <!-- End Tooltip5 -->
-      <div> 
-        <span id="imageProcessed" style="margin: auto;">Images Processed: 0 /</span> <span id="totalProcessed">0</span>
-        <img src="./images/loading.gif" id="loader"> </div>
-        <br>
-        <span id="scansRemaining" style="margin: auto;">Scans Remaining: 0</span>
+          <div> 
+            <span id="imageProcessed" style="margin: auto;">Images Processed:0 /</span> 
+            <span id="totalProcessed">0</span> 
+            <img src="./images/loading.gif"id="loader"> 
+          </div>
       </div>
-      <!--firebaseFunctions must be called after initializing login-->
-      <script type="text/javascript"src="firebaseFunctions.js"></script>
       <!-- Loading circle -->
       <!-- End of Flexwrap -->
       <div style="text-align: center; margin-top: 5px">
@@ -299,6 +270,7 @@ rows="3"></textarea> </label></div>
         this.classList.remove('draggedOver');
         this.classList.add('notDraggedOver');
       }
+
       $('#imageSelectSection').on({
         'drop': handleDroppedFile,
         'dragenter': function (e) { e.preventDefault(); },
@@ -348,7 +320,6 @@ rows="3"></textarea> </label></div>
       document.getElementById('segment_user_2').addEventListener('change', chkbox_sync);
       document.getElementById('segment_user_row').addEventListener('change', new_num_seg);
       document.getElementById('segment_user_col').addEventListener('change', new_num_seg);
-
     </script> </div>
   </body>
 </html>
