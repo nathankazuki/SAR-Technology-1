@@ -37,6 +37,26 @@ var exifDataArray = [];
  *  input = predict local files button
  *  output = div for results
  */
+
+function setSelections() {
+    var selectedRadio = localStorage.getItem('radioButton');
+    var selectedDropDown = localStorage.getItem('dropDown');
+
+    if (selectedRadio == "appGeneral") {
+        document.getElementById(selectedRadio).checked = true;
+    }
+    else if (selectedRadio == 'appColor') {
+        document.getElementById(selectedRadio).checked = true;
+    }
+    else if (selectedRadio == 'appCustom') {
+        document.getElementById(selectedRadio).checked = true;
+    }
+
+    if (selectedDropDown !== null) {
+        document.getElementById('customModelDropDown').value = selectedDropDown;
+    }
+}
+
 function showFileName(value) {
     baseArray = [];
     imgArray = [];
