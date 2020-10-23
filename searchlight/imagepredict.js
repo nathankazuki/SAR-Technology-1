@@ -231,37 +231,57 @@ function getApp() {
         "Helicopters Crashed": helicopterApp,
         "Aircraft Crashed": aircraftApp
     };
-    try {
-        if(model == "custom") {
-            var stuff = document.getElementById('customModelDropDown').value;
-            if (stuff == "Persons App.") {
-                return personsApp;
-            } else if (stuff == "Helicopters Crashed") {
-                return helicopterApp;
-            } else if (stuff == "Aircraft Crashed") {
-                return aircraftApp
-            }
-        } else {
+
+    if(model == "custom") {
+        var stuff = document.getElementById('customModelDropDown').value;
+        //console.log(stuff);
+        if (stuff == "Persons App." && personsKey == 'c8188c5823ff4e8b8b8f40a8a8a4ad0f') {
             return personsApp;
+        } else if (stuff == "Helicopters Crashed" && helicopterKey == 'e98478e0346b43fdb7f3640d52b8f925') {
+            return helicopterApp;
+        } else if (stuff == "Aircraft Crashed" && aircraftKey == '0b18e04f290a4d169b4168a81efef47a') {
+            return aircraftApp;
+        } else if (stuff == "Persons App." && personsKey != 'c8188c5823ff4e8b8b8f40a8a8a4ad0f') {
+            swal("API Error", "Scan cannot be completed.", "error", {
+                buttons: {
+                    Ok: true,
+                },
+            })
+            .then((value) => {
+                switch (value) {
+                    default:
+                        location.reload();
+                }
+            });
+        } else if (stuff == "Helicopters Crashed" && helicopterKey != 'e98478e0346b43fdb7f3640d52b8f925') {
+            swal("API Error", "Scan cannot be completed", "error", {
+                buttons: {
+                    Ok: true,
+                },
+            })
+            .then((value) => {
+                switch (value) {
+                    default:
+                        location.reload();
+                }
+            });
+        } else if (stuff == "Aircraft Crashed" && aircraftKey != '0b18e04f290a4d169b4168a81efef47a') {
+            swal("API Error", "Scan cannot be completed", "error", {
+                buttons: {
+                    Ok: true,
+                },
+            })
+            .then((value) => {
+                switch (value) {
+                    default:
+                        location.reload();
+                }
+            });
         }
-    } catch(err) {
-        console.log(err);
+    } else {
+        return personsApp;
     }
 }
-//     if(model == "custom") {
-//         var stuff = document.getElementById('customModelDropDown').value;
-//         //console.log(stuff);
-//         if (stuff == "Persons App.") {
-//             return personsApp;
-//         } else if (stuff == "Helicopters Crashed") {
-//             return helicopterApp;
-//         } else if (stuff == "Aircraft Crashed") {
-//             return aircraftApp;
-//         }
-//     } else {
-//         return personsApp;
-//     }
-// }
 
 
 
