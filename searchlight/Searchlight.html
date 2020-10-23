@@ -140,20 +140,28 @@
             <!-- <input id="appCustom" name="model" value="custom" checked="checked" type="radio">
                       Custom                      <select id="customModelDropDown" form="radioButtonSelections">                        <option value="Persons App.">Persons</option>                        <option value="Helicopters Crashed">Crashed Helicopters</option>                        <option value="Aircraft Crashed">Crashed Aircraft</option>                      </select> -->
             <!-- </form> -->
-            <form id="radioButtonSelections" action=""> <label> <input id="appGeneral"
-                  name="model" value="general" type="radio"> General - <a href="./keywords.htm"
-                  target="_blank">Keyword list</a> </label> <br>
-              <label> <input id="appColor" name="model" value="color" type="radio">
-                Color - <a href="./colors_page/colors.htm" target="_blank">Color
-                  palette <img src="images/0.png" height="15"></a> </label> <br>
-              <label> <input id="appCustom" name="model" value="custom" checked="checked"
-                  type="radio"> Custom </label>
-              <select id="customModelDropDown" form="radioButtonSelections">
+
+            <form id="radioButtonSelections" action="">
+              <label> <input id="appGeneral" name="model" value="general" type="radio" onclick="localStorage.setItem('radioButton', 'appGeneral')">
+                  General - <a href="./keywords.htm" target="_blank">Keyword list</a>
+              </label> <br>
+              <label> <input id="appColor" name="model" value="color" type="radio" onclick="localStorage.setItem('radioButton', 'appColor')">
+                  Color - <a href="./colors_page/colors.htm" target="_blank">Color palette<img src="images/0.png" height="15"></a>
+              </label> <br>
+              <label> <input id="appCustom" name="model" value="custom" type="radio" onclick="localStorage.setItem('radioButton', 'appCustom')" checked>
+                  Custom 
+              </label>
+              <select id="customModelDropDown" form="radioButtonSelections" onchange="localStorage.setItem('dropDown', document.getElementById('customModelDropDown').value)">
                 <option value="Persons App.">Persons</option>
                 <option value="Helicopters Crashed">Crashed Helicopters</option>
                 <option value="Aircraft Crashed">Crashed Aircraft</option>
               </select>
             </form>
+
+            <script>
+              setSelections();
+            </script>
+
           </div>
           <!-- Select Threshold -->
           <div style="float: left">
