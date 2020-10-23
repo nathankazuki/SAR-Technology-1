@@ -31,6 +31,7 @@ var currentImageNum = 1;
 var fileExifArray = [];
 var detailsArray = [];
 var exifDataArray = [];
+var imagesToProcess = 0;
 /**
  *  Shows file name of selected images.
  *  param: value - an array of files incoming from the HTML
@@ -74,7 +75,8 @@ function showFileName(value) {
 
     if (segment_option){
         if (segment_selection.length < 1){
-            window.alert("Segmentation is enabled. Please select the segments with the selection box in the upper right.");
+            //window.alert("Segmentation is enabled. Please select the segments with the selection box in the upper right.");
+            window.swal("Segmentation Error", "Segmentation is enabled. Please select the segments with the selection box in the upper right", "error");
             return
         }
 
@@ -86,12 +88,13 @@ function showFileName(value) {
     }
 
     //update user-defined segmentation selection
+    console.log(isLoading);
     isLoading = true;
     showLoading(isLoading);
+    console.log(isLoading);
 
     for (var i = 0; i < input.files.length; ++i) {
-        //output.innerHTML += '<li>' +input.files.item(i).name + '     <br>Size: ' +input.files.item(i).size/1000 + ' KB' + '<br>Date: ' +input.files.item(i).lastModifiedDate + '</li><br>';
-        console.log(input.files[i]);
+        //console.log(input.files[i]);
         if (segment_option){
             var reader_segment = new FileReader();
             reader_segment.readAsDataURL(input.files[i]);
@@ -104,8 +107,21 @@ function showFileName(value) {
             getBase64(input.files[i], input, input.files);
         }
     }
-    // Close unordered list tag
-//    output.innerHTML += '</ul>'
+}
+
+/**
+ * Show or hide the loading circle dependent on boolean isLoading
+ */
+function showLoading(bool) {
+    var loadCircle = document.getElementById("loader");
+    if(bool == true) {
+        loadCircle.style.visibility = "visible";
+    } else {
+        loadCircle.style.visibility = "hidden";
+        document.getElementById("imageFolderSelectButton").value = "";
+        document.getElementById("imageFileSelectButton").value = "";
+        swal("Success!", "Successfully scanned all images", "success");
+    }
 }
 
 /**
@@ -148,11 +164,6 @@ function showTarget(input) {
     }
 }
 
-/*
-"<br>File Name: " + image.files.item(i).name + "<br>Size: " + image.files.item(i).size /1000
-+ " KB" + "<br>Date: " + image.files.item(i).lastModifiedDate;
-*/
-
 function getBase64(file, val, fileInput) {
     var reader = new FileReader();
     var exifEnabled = document.getElementById('exifOn');
@@ -171,9 +182,9 @@ function getBase64(file, val, fileInput) {
                 imgArray.push(reader.result);
 
                 totalPredictions++;
-                console.log("Predict called" + totalPredictions + fileInput.length);
+                //console.log("Predict called" + totalPredictions + fileInput.length);
                 if (baseArray.length == 4096*4 || totalPredictions == fileInput.length) {
-                    console.log("Predict called" + totalPredictions + fileInput.length);
+                    //console.log("Predict called" + totalPredictions + fileInput.length);
 
                     predict(file, baseArray, val, imgArray, fileDataArray,exifDataArray);
 
@@ -225,31 +236,65 @@ function getBase64(file, val, fileInput) {
 */
 function getApp() {
     var model = document.querySelector('input[name = "model"]:checked').value;
-    console.log("Model: " + model);
-
+    //console.log("Model: " + model);
     var keyList = {
         "Persons App.": personsApp,
         "Helicopters Crashed": helicopterApp,
         "Aircraft Crashed": aircraftApp
-        /**
-         * Add t
-         */
     };
 
     if(model == "custom") {
         var stuff = document.getElementById('customModelDropDown').value;
-        console.log(stuff);
-        if (stuff == "Persons App.") {
+        //console.log(stuff);
+        if (stuff == "Persons App." && personsKey == 'c8188c5823ff4e8b8b8f40a8a8a4ad0f') {
             return personsApp;
-        } else if (stuff == "Helicopters Crashed") {
+        } else if (stuff == "Helicopters Crashed" && helicopterKey == 'e98478e0346b43fdb7f3640d52b8f925') {
             return helicopterApp;
-        } else if (stuff == "Aircraft Crashed") {
+        } else if (stuff == "Aircraft Crashed" && aircraftKey == '0b18e04f290a4d169b4168a81efef47a') {
             return aircraftApp;
+        } else if (stuff == "Persons App." && personsKey != 'c8188c5823ff4e8b8b8f40a8a8a4ad0f') {
+            swal("API Error", "Scan cannot be completed.", "error", {
+                buttons: {
+                    Ok: true,
+                },
+            })
+            .then((value) => {
+                switch (value) {
+                    default:
+                        location.reload();
+                }
+            });
+        } else if (stuff == "Helicopters Crashed" && helicopterKey != 'e98478e0346b43fdb7f3640d52b8f925') {
+            swal("API Error", "Scan cannot be completed", "error", {
+                buttons: {
+                    Ok: true,
+                },
+            })
+            .then((value) => {
+                switch (value) {
+                    default:
+                        location.reload();
+                }
+            });
+        } else if (stuff == "Aircraft Crashed" && aircraftKey != '0b18e04f290a4d169b4168a81efef47a') {
+            swal("API Error", "Scan cannot be completed", "error", {
+                buttons: {
+                    Ok: true,
+                },
+            })
+            .then((value) => {
+                switch (value) {
+                    default:
+                        location.reload();
+                }
+            });
         }
     } else {
         return personsApp;
     }
 }
+
+
 
 
 /**
@@ -268,8 +313,6 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
     var fileProperties = document.getElementById('fileProperties');
     var exifEnabled = document.getElementById('exifOn');
     window.filePath = document.getElementById('filePathInput').value;
-    // if(window.filePath == ' ')
-    // window.filePath = "Not specified";
     var threshold = document.getElementById('thresholdInputText').value;
     if (threshold == '' || threshold == 0) {
         threshold = -1;
@@ -311,20 +354,17 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
                         dataTags = response.rawData.outputs[i].data.colors;
                         // Hardcoded, but if the first concept in the list is the higher than the treshold it will
                         // display what is there.
-                        if (dataTags[0].value.toFixed(2) * 100 >= parseFloat(threshold)) {
+                        if (dataTags[0].value * 100 >= parseFloat(threshold)) {
 
                             // stores image thumbnails
                             var thumbNail = "<img class='table_img' src ='" + imgArray[i] + "'/>";
 
                             //Stores Image Score
                             var imgScore = String(dataTags[0].value * 100).substring(0, 5);
-                            // var imgScore = n + "%";
 
                             // stores image tags
                             var imageTags = [];
                             for (var j = 0; j < dataTags.length; ++j) {
-                                // imageTags[j] = "<br>" + dataTags[j].w3c.name + " " + String(dataTags[j].value * 100).substring(0,5) + "% " +
-                                // "<svg class='colsq' width='100' height='30'> <rect width='200' height='20' style='fill:" + dataTags[j].w3c.name + ";' /> </svg> ";
                                 imageTags[j] = "<div style='width: 300px; background: linear-gradient(to right, white 60%, " + dataTags[j].w3c.name + " 60%'>" + dataTags[j].w3c.name + " " + String(dataTags[j].value * 100).substring(0,5) + "%      </div>";
                             }
                             imageTags = imageTags.join("");
@@ -382,30 +422,13 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
                                     rows.length = 0
                                 } );
                             }
-
-
-                            // $(document).ready(function() {
-                            //     var t = $('#results').DataTable();
-
-                            //       t.row.add( [
-                            //         thumbNail,
-                            //         "",
-                            //         imgScore,
-                            //         imageTags,
-                            //         exifDetails]
-                            //     ).draw( false );
-                            //     $('#results').on('keyup', function () {
-                            //         t.search(this.value).draw()
-                            //     })
-                            // } );
-
                         }
-
                     }
                 }
-
+                console.log(isLoading);
                 isLoading = false;
                 showLoading(isLoading);
+                console.log(isLoading);
             },
             function (err) {
                 predict(val, image, imgArray, fileData);
@@ -441,7 +464,7 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
 
                     // Hardcoded, but if the first concept in the list is the higher than the threshold it will
                     // display what is there.
-                    if (dataTags[0].value.toFixed(2) * 100 >= parseFloat(threshold)) {
+                    if (dataTags[0].value * 100 >= parseFloat(threshold)) {
 
                         // stores image thumbnails
                         var thumbNail = "<img class='table_img' src ='" + imgArray[i] + "'/>";
@@ -514,13 +537,12 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
                                 rows.length = 0
                             } );
                         }
-
-
                     }
                 }
-
+                console.log(isLoading);
                 isLoading = false;
                 showLoading(isLoading);
+                console.log(isLoading);
             },
             function (err) {
                 predict(val, image, imgArray, fileData);
@@ -531,24 +553,10 @@ function predict(file, val, image, imgArray, fileData, exifDataArray) {
 
 }
 
-/**
- * Show or hide the loading circle dependent on boolean isLoading
- */
-function showLoading(bool) {
-    var loadCircle = document.getElementById("loader");
-    if(bool == true) {
-        loadCircle.style.visibility = "visible";
-    } else {
-        loadCircle.style.visibility = "hidden";
-        document.getElementById("imageFolderSelectButton").value = "";
-        document.getElementById("imageFileSelectButton").value = "";
-    }
-}
-
 
 function getCriteria() {
     var selectedCriteria = document.querySelector('input[name = "model"]:checked').value;
-    console.log(selectedCriteria);
+    //console.log(selectedCriteria);
     if (selectedCriteria == "general") {
         return Clarifai.GENERAL_MODEL;
     } else if (selectedCriteria == "color") {
@@ -700,7 +708,6 @@ function getPhotodata(file) {
             var speedRef = exifAllTags.GPSSpeedRef ? exifAllTags.GPSSpeedRef + "PH" : ''
             var mapsLink = latitude && longitude ? "<a href='http://maps.google.com/maps?q=" + latitude + ',' + longitude + "'  target='_blank'>" + latStr + ', ' + lonStr + "<img src='./images/MagnifyingGlassBlue.png' height='16' width='16' style='margin-left: 8px'></a>" : 'Not Available'
             resolve([latitude, longitude, dateTaken, device, latStr, lonStr, altitude, bearing, bearingRef, speed, speedRef, mapsLink])
-
     })
 })
 }
@@ -762,7 +769,7 @@ function loadImage(file) {
             while (source_img_parent.hasChildNodes()) {
                 source_img_parent.removeChild(source_img_parent.childNodes[0])
             }
-            console.log(temp_imgData_Array);
+           //console.log(temp_imgData_Array);
             resolve(temp_imgData_Array)
         });
     })}
@@ -774,7 +781,7 @@ function segmentation(file, type){
                 createTable(result);
             }
             resolve(result);
-            console.log('Created Table')
+            //console.log('Created Table')
         });
     })
 }
@@ -847,10 +854,10 @@ function get_checkbox_list(){
             else{
                 segment_selection.push(false);
             }
-            console.log(table.rows[i].cells[j]);
+            //console.log(table.rows[i].cells[j]);
         }
     }
-    console.log(segment_selection);
+    //console.log(segment_selection);
 }
 
 function on_load_segment(file, num_seg){
@@ -871,7 +878,7 @@ function on_load_segment(file, num_seg){
         reader_segment.readAsDataURL(file);
         reader_segment.onload = function(e){
             loadImage(e.target.result).then((result) => {
-                console.log('123');
+                //console.log('123');
                 resolve([result, file, temp_img_details, num_seg])
             });
         }
@@ -885,7 +892,6 @@ function segmented_api_prep(img_segments, file, details, num_seg) {
             var temp_exif_data = result;
             for (var seg_num = 0; seg_num < img_segments.length; seg_num++) {
                 if (segment_selection[seg_num]) {
-
                     var temp_details = [
                         details[0].toString() + " Segment Position:" + (seg_num + 1).toString(),
                         details[1],
@@ -901,10 +907,16 @@ function segmented_api_prep(img_segments, file, details, num_seg) {
                     exifDataArray.push(temp_exif_data);
                     totalPredictions++;
                 }
+                console.log("totalPredictions " + totalPredictions)
+                console.log(totalPredictions)
+                console.log(baseArray.length)
+                console.log(num_seg)
 
                 if (baseArray.length == 32 || totalPredictions == num_seg) {
-                    console.log("Predict called" + totalPredictions + num_seg);
-                    segmented_api_call(file, baseArray, num_seg, imgArray, detailsArray, exifDataArray);
+                    console.log("Ran")
+                    //console.log("Predict called" + totalPredictions + num_seg);
+                    imagesToProcess += baseArray.length;
+                    segmented_api_call(file, baseArray, baseArray.length, imgArray, detailsArray, exifDataArray, num_seg);
 
                     detailsArray = [];
                     baseArray = [];
@@ -937,9 +949,11 @@ function segmented_api_prep(img_segments, file, details, num_seg) {
                 exifDataArray.push('');
                 totalPredictions++;
             }
+            console.log("baseArray " + baseArray);
+            console.log(baseArray);
             if (baseArray.length == 32 || totalPredictions == num_seg) {
                 console.log("Predict called" + totalPredictions + num_seg);
-                segmented_api_call(file, baseArray, num_seg, imgArray, detailsArray, exifDataArray);
+                segmented_api_call(file, baseArray, baseArray.length, imgArray, detailsArray, exifDataArray);
 
                 detailsArray = [];
                 baseArray = [];
@@ -956,7 +970,7 @@ function segmented_api_prep(img_segments, file, details, num_seg) {
     }
 }
 
-function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifDataArray){
+function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifDataArray, totalSegs){
     var app = getApp();
     var successfulPredict = false;
     var modelID = getCriteria();
@@ -968,7 +982,6 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
     if (threshold == '' || threshold == 0) {
         threshold = -1;
     }
-
 
     if (modelID == Clarifai.COLOR_MODEL) {
         //Clarifai API call
@@ -991,7 +1004,7 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                         dataTags = response.rawData.outputs[i].data.colors;
                         // Hardcoded, but if the first concept in the list is the higher than the treshold it will
                         // display what is there.
-                        if (dataTags[0].value.toFixed(2) * 100 >= parseFloat(threshold)) {
+                        if (dataTags[0].value * 100 >= parseFloat(threshold)) {
 
                             // stores image thumbnails
                             var thumbNail = "<img class='table_img' src ='" + imgArray[i] + "'/>";
@@ -1002,9 +1015,8 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
 
                             // stores image tags
                             var imageTags = [];
+                            console.log("dataTags.length " + dataTags.length);
                             for (var j = 0; j < dataTags.length; ++j) {
-                                // imageTags[j] = "<br>" + dataTags[j].w3c.name + " " + String(dataTags[j].value * 100).substring(0,5) + "% " +
-                                // "<svg class='colsq' width='100' height='30'> <rect width='200' height='20' style='fill:" + dataTags[j].w3c.name + ";' /> </svg> ";
                                 imageTags[j] = "<div style='width: 300px; background: linear-gradient(to right, white 60%, " + dataTags[j].w3c.name + " 60%'>" + dataTags[j].w3c.name + " " + String(dataTags[j].value * 100).substring(0,5) + "%      </div>";
                             }
                             imageTags = imageTags.join("");
@@ -1063,30 +1075,16 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                                     rows.length = 0
                                 } );
                             }
-
-
-                            // $(document).ready(function() {
-                            //     var t = $('#results').DataTable();
-
-                            //       t.row.add( [
-                            //         thumbNail,
-                            //         "",
-                            //         imgScore,
-                            //         imageTags,
-                            //         exifDetails]
-                            //     ).draw( false );
-                            //     $('#results').on('keyup', function () {
-                            //         t.search(this.value).draw()
-                            //     })
-                            // } );
-
                         }
-
                     }
                 }
                 // for row in rowarray, add row to table with all details
-                isLoading = false;
-                showLoading(isLoading);
+                if (totalPredictions == predictionCount) {
+                    console.log(isloading);
+                    isLoading = false;
+                    showLoading(isLoading);
+                    console.log(isloading);
+                }
             },
             function (err) {
                 predict(val, image, imgArray, fileData);
@@ -1104,26 +1102,46 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                 /*var values = new Array(num_seg);*/
                 //For each file selected by user, show results
 
+                console.log("num_seg " + num_seg);
+                for (var i = 0; i < num_seg; i++) {
+                    imagesToProcess--;
+                    console.log("i " + i);
+                    console.log("num_seg " + num_seg);
+                    console.log("response" + response)
+                    console.log(response)
 
-                for (var i = 0; i < num_seg; ++i) {
+                    console.log("response.rawData" + response.rawData)
+                    console.log(response.rawData)
+
+                    console.log("response.rawData.outputs" + response.rawData.outputs)
+                    console.log(response.rawData.outputs)
+
+                    console.log("response.rawData.outputs[i]" + response.rawData.outputs[i])
+                    console.log(response.rawData.outputs[i])
+
+                    console.log("response.rawData.outputs[i].data.concepts" + response.rawData.outputs[i].data.concepts)
+                    console.log(response.rawData.outputs[i].data.concepts)
+
                     dataTags = response.rawData.outputs[i].data.concepts;
-
                     fileDetails = detailsArray[i];
 
                     // Hardcoded, but if the first concept in the list is the higher than the threshold it will
                     // display what is there.
-                    if (dataTags[0].value.toFixed(2) * 100 >= parseFloat(threshold)) {
+                    console.log("parseFloat(threshold) " + parseFloat(threshold));
+                    console.log("datatags " + dataTags);
+                    console.log(dataTags);
+                    console.log("dataTags[0].value " + dataTags[0].value.toFixed(2));
+                    if (dataTags[0].value * 100 >= parseFloat(threshold)) {
 
                         // stores image thumbnails
                         var thumbNail = "<img class='table_img' src ='" + imgArray[i] + "'/>";
 
                         //Stores Image Schore
                         var imgScore = String(dataTags[0].value * 100).substring(0, 5);
-                        // var imgScore = n + "%";
 
                         // stores image tags
                         var imageTags = [];
-                        for (var j = 0; j < dataTags.length; ++j) {
+                        for (var j = 0; j < dataTags.length; j++) {
                             imageTags[j] = "<br>" + dataTags[j].name + " " + String(dataTags[j].value * 100).substring(0, 5) + "%";
                         }
 
@@ -1190,10 +1208,14 @@ function segmented_api_call(file, val, num_seg, imgArray, detailsArray, exifData
                     }
                 }
 
+                console.log("testtest");
                 // for row in rowarray, add row to table with all details
-
-                isLoading = false;
-                showLoading(isLoading);
+                if (imagesToProcess == 0) {
+                    console.log(isLoading);
+                    isLoading = false;
+                    showLoading(isLoading);
+                    console.log(isLoading);
+                }
             },
             function (err) {
                 /*predict(val, image, imgArray, fileData);*/
