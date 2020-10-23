@@ -38,12 +38,23 @@ var imagesToProcess = 0;
  *  input = predict local files button
  *  output = div for results
  */
- 
-function checklogin() {
-    var apple = 0;
-    console.log("test");
-    if (apple === 0) {
-        window.location.replace("../Login/index.html");
+
+function setSelections() {
+    var selectedRadio = localStorage.getItem('radioButton');
+    var selectedDropDown = localStorage.getItem('dropDown');
+
+    if (selectedRadio == "appGeneral") {
+        document.getElementById(selectedRadio).checked = true;
+    }
+    else if (selectedRadio == 'appColor') {
+        document.getElementById(selectedRadio).checked = true;
+    }
+    else if (selectedRadio == 'appCustom') {
+        document.getElementById(selectedRadio).checked = true;
+    }
+
+    if (selectedDropDown !== null) {
+        document.getElementById('customModelDropDown').value = selectedDropDown;
     }
 }
 
